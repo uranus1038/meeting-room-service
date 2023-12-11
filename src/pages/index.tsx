@@ -1,12 +1,19 @@
-import { FC } from 'react';
-import { BrowserRouter as   Navigate  } from "react-router-dom";
+import { Component, ReactNode } from 'react';
+import { BrowserRouter as Navigate } from "react-router-dom";
+import Banner from '../components/banner';
 // components
+import LoginForm from '../components/login_form';
 import { Navbar } from '../components/navbar';
-
-export const Index: FC = () => {
+export class Index extends Component {
+  render(): ReactNode {
     return (
       <>
-      <Navbar />
+        <Navbar />
+        <Banner />
+
       </>
+
     )
-  } 
+  }
+
+} 

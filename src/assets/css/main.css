@@ -1,0 +1,22 @@
+.fc-daygrid-day-frame:hover
+{
+  background:  rgb(225, 225, 228);
+}
+.fc .fc-toolbar.fc-header-toolbar {
+ background-color: none  ;
+  margin: 0;
+font-size: 13px;
+}
+.fc-prev-button.fc-button.fc-button-primary ,.fc-next-button.fc-button.fc-button-primary{
+  background-color: rgb(37 99 235) !important;
+  border: 0;
+  color: white !important;
+  box-shadow: none !important ; 
+  font-size: 10px;
+}
+.fc-prev-button.fc-button.fc-button-primary:hover ,.fc-next-button.fc-button.fc-button-primary:hover {
+  background-color:#5FBDFF!important;
+ 
+}
+
+
