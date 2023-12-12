@@ -1,4 +1,5 @@
-import { Component, ReactNode } from 'react';
+import { Component, ReactNode, ChangeEvent, MouseEvent } from 'react';
+import axios from 'axios';
 // props interface
 interface MyProps {
     OnStateChange(newState: number): void;
@@ -13,6 +14,7 @@ interface MyState {
     department: string
     section: string
     role: string
+    error : string
 }
 class CreationForm extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
@@ -23,15 +25,58 @@ class CreationForm extends Component<MyProps, MyState> {
             userName: "",
             passWord: "",
             tel: 0,
-            department: "",
-            section: "",
-            role: "",
+            department: "---",
+            section: "---",
+            role: "---",
+            error: "",
         };
     }
-    private setUser:(events:)=> void = () =>
-    {
+    private OnSubmit: () => Promise<void> = async () => {
 
+       await axios.post("http://localhost:8000/api/user/login/",{
+            data : this.state  
+        }).then((response)=>{
+           
+            
+        }).catch((err)=>
+        {
+            const message:string = err.response.data.message
+            this.setState({error:message});
+            document.getElementById("alertError")?.classList.remove("hidden");
+        })
     }
+    private setUser: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
+        await this.setState({ user: events.target.value });
+    }
+    private setGender: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
+        await this.setState({ gender: events.target.value });
+        console.log(this.state.gender);
+    }
+    private setUserName: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
+        await this.setState({ userName: events.target.value });
+        console.log(this.state.userName);
+    }
+    private setPassWord: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
+        await this.setState({ passWord: events.target.value });
+        console.log(this.state.passWord);
+    }
+    private setTel: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
+        await this.setState({ tel: Number.parseInt(events.target.value) });
+        console.log(this.state.tel);
+    }
+    private setDepartment: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
+        await this.setState({ department: events.target.value });
+        console.log(this.state.department);
+    }
+    private setSection: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
+        await this.setState({ section: events.target.value });
+        console.log(this.state.section);
+    }
+    private setRole: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
+        await this.setState({ role: events.target.value });
+        console.log(this.state.role);
+    }
+  
     render(): ReactNode {
         return (
             <div>
@@ -53,43 +98,46 @@ class CreationForm extends Component<MyProps, MyState> {
                             </div>
                             <div className="p-4 md:p-5">
                                 <form className="space-y-4" action="#">
+                                    <div id='alertError' className="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                       {this.state.error}
+                                    </div>
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อในการเข้าสู่ระบบ</label>
-                                        <input type="text" name="User" id="User" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="example" required />
+                                        <input onChange={this.setUser} type="text" name="User" id="User" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="example" required />
                                     </div>
                                     <div className="flex">
-                                        <select id="states" className="inline-flex items-center py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                        <select onChange={this.setGender} id="states" className="inline-flex items-center py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" >
                                             <option selected>เพศ</option>
-                                            <option value="CA">ชาย</option>
-                                            <option value="TX">หญิง</option>
+                                            <option value="male">ชาย</option>
+                                            <option value="female">หญิง</option>
                                         </select>
-                                        <input type="text" name="userName" id="userName" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-e-lg border-s-gray-100 dark:border-s-gray-700 border-s-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="ชื่อ-นามาสกุล" required />
+                                        <input onChange={this.setUserName} type="text" name="userName" id="userName" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-e-lg border-s-gray-100 dark:border-s-gray-700 border-s-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="ชื่อ-นามาสกุล" required />
                                     </div>
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รหัสผ่าน</label>
-                                        <input type="password" name="password" id="password" placeholder="*******" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
+                                        <input onChange={this.setPassWord} type="password" name="password" id="password" placeholder="*******" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                                     </div>
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เบอร์โทร</label>
-                                        <input type="number" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="xxx-xxxx-xxx" required />
+                                        <input onChange={this.setTel} type="number" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="xxx-xxxx-xxx" required />
                                     </div>
 
                                     <div className="flex">
-                                        <select id="states" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                        <select onChange={this.setDepartment} id="states" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
                                             <option selected>ฝ่าย</option>
 
                                         </select>
-                                        <select id="states" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300  hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                                            <option selected>แผนก</option>
+                                        <select onChange={this.setSection} id="states" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300  hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                            <option selected>---</option>
 
                                         </select>
-                                        <select id="states" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                                            <option selected>ตำแหน่ง</option>
+                                        <select onChange={this.setRole} id="states" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                            <option selected>---</option>
 
                                         </select>
 
                                     </div>
-                                    <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <button onClick={()=>{this.OnSubmit()}} type="button" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         สร้างบัญชีของคุณ</button>
                                     <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                                         คุณมีบัญชีอยู่แล้ว? <button onClick={() => { this.props.OnStateChange(1) }} className="text-blue-700 hover:underline dark:text-blue-500">เข้าสู่ระบบ</button>

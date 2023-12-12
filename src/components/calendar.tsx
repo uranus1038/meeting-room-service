@@ -29,7 +29,7 @@ class Calendar extends Component<MyProps> {
         //   hour12: false,
         // });
 
-        alert('Current Time (String):'+currentDate);
+        // alert('Current Time (String):'+currentDate);
         
 
     };
