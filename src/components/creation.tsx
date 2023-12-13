@@ -1,5 +1,6 @@
-import { Component, ReactNode, ChangeEvent, MouseEvent } from 'react';
+import { Component, ReactNode, ChangeEvent } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'
 // props interface
 interface MyProps {
     OnStateChange(newState: number): void;
@@ -28,21 +29,49 @@ class CreationForm extends Component<MyProps, MyState> {
             department: "---",
             section: "---",
             role: "---",
-            error: "",
+            error : ""
         };
     }
+    private resultError:string = "" ;
     private OnSubmit: () => Promise<void> = async () => {
 
-       await axios.post("http://localhost:8000/api/user/login/",{
-            data : this.state  
+       await axios.post("http://localhost:8000/api/user/creation/",{
+            user : this.state.user , 
+            userName : this.state.userName , 
+            passWord : this.state.passWord , 
+            tel : this.state.tel , 
+            gender : this.state.gender , 
+            department : this.state.department , 
+            section : this.state.section , 
+            role : this.state.role 
         }).then((response)=>{
-           
-            
+            if(response.status === 200){
+                this.props.OnStateChange(0) ;
+                Swal.fire({
+                    title: "การสมัครใช้งานสำเร็จ",
+                    text: "ขอบคุณที่เข้าร่วม! คุณสามารถเข้าสู่ระบบได้ทันที.",
+                    icon: "success",
+                    confirmButtonText: "เข้าสู่ระบบ",
+                    cancelButtonText: "ปิด",
+                    showCancelButton: true,
+                  }).then((result)=>
+                  {
+                    if(result.isConfirmed)
+                    {
+                        this.props.OnStateChange(1) ;
+                    }
+                  });
+               
+            }
         }).catch((err)=>
         {
-            const message:string = err.response.data.message
-            this.setState({error:message});
-            document.getElementById("alertError")?.classList.remove("hidden");
+            if(err.response.status === 400)
+            {
+                const message:string = err.response.data.message
+                this.setState({error:message});
+                document.getElementById("alertError")?.classList.remove("hidden");
+            }
+            
         })
     }
     private setUser: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
@@ -50,31 +79,24 @@ class CreationForm extends Component<MyProps, MyState> {
     }
     private setGender: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
         await this.setState({ gender: events.target.value });
-        console.log(this.state.gender);
     }
     private setUserName: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
         await this.setState({ userName: events.target.value });
-        console.log(this.state.userName);
     }
     private setPassWord: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
         await this.setState({ passWord: events.target.value });
-        console.log(this.state.passWord);
     }
     private setTel: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
         await this.setState({ tel: Number.parseInt(events.target.value) });
-        console.log(this.state.tel);
     }
     private setDepartment: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
         await this.setState({ department: events.target.value });
-        console.log(this.state.department);
     }
     private setSection: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
         await this.setState({ section: events.target.value });
-        console.log(this.state.section);
     }
     private setRole: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
         await this.setState({ role: events.target.value });
-        console.log(this.state.role);
     }
   
     render(): ReactNode {
