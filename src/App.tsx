@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-d
 import axios from 'axios';
 //components
 import { Index } from './pages';
-import { Addmin } from './pages/addmin';
+import { Dashboad } from './pages/dashbord';
 // keyname
 import {keyName} from '../config-web.json'
 //interface
@@ -11,17 +11,20 @@ import { user } from './interface/accout';
 const App: FC = () => {
   const [user , setUser ] = useState<user>({ user:"" ,userName:""  , tel:0 , gender:"" ,department:"" , section:"" , role:"" , member:""});
   useEffect(() => {
-    //getUserData();
-  });
+    getUserData();
+  },[]);
+  function setUserState(newState:user):void
+  {
+        setUser(newState);
+  }
   const getUserData: () => Promise<void> = async() => {
     if (localStorage.getItem(keyName) !== null) {
-      console.log("pass")
     const token = await localStorage.getItem(keyName);
     await axios.get("http://localhost:8000/api/user/get-user/",{ headers: {'Authorization': `Bearer ${token}`} }).then((response)=>
     {
       if(response.status == 200)
       {
-        console.log(response.data.user);
+        setUser(response.data.user);
       }
     })
   }
@@ -30,8 +33,8 @@ const App: FC = () => {
     <div>
       <Router>
         <Routes>
-          <Route path="/th/home" element={<Index />} />
-          <Route path="/th/admin" element={<Addmin />} />
+          <Route path="/th/home" element={<Index dataUser={user} setDataUser={setUserState}/>} />
+          <Route path="/th/dashboad" element={<Dashboad />} />
           <Route path="*" element={<Navigate to="/th/home" />} />
         </Routes>
       </Router>

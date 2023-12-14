@@ -12,11 +12,12 @@ import {user} from '../interface/accout';
 interface MyState{
   eFormState:number
 }
-interface props{
-
+interface MyProps{
+  dataUser:user
+  setDataUser(data:user):void;
 }
-export class Index extends Component<{}, MyState> {
-  constructor(props: {}) {
+export class Index extends Component<MyProps, MyState> {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       eFormState: 0,
@@ -31,10 +32,10 @@ export class Index extends Component<{}, MyState> {
     const {eFormState} = this.state ;
     return (
       <>
-        <Navbar OnStateChange={this.setStateForm} />
+        <Navbar OnStateChange={this.setStateForm} dataUser={this.props.dataUser}/>
         <Banner OnStateChange={this.setStateForm} />
         {(eFormState !== 1 && eFormState !== 2)? (<p></p>) : ((eFormState === 2) ? 
-        (<CreationForm OnStateChange={this.setStateForm}/>):(<LoginForm OnStateChange={this.setStateForm} />))}
+        (<CreationForm OnStateChange={this.setStateForm}/>):(<LoginForm OnStateChange={this.setStateForm} setDataUser={this.props.setDataUser}/>))}
       </>
 
     )

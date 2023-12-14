@@ -20,3 +20,11 @@ font-size: 13px;
 }
 
 
+#dropdownUserAvatarButton:hover + #dropdownAvatar
+{
+  display: block !important;
+}
+#dropdownAvatar:hover
+{
+  display: block !important;
+}

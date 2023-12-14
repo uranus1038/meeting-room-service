@@ -15,7 +15,7 @@ interface MyState {
     department: string
     section: string
     role: string
-    error : string
+    error: string
 }
 class CreationForm extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
@@ -29,24 +29,23 @@ class CreationForm extends Component<MyProps, MyState> {
             department: "---",
             section: "---",
             role: "---",
-            error : ""
+            error: ""
         };
     }
-    private resultError:string = "" ;
     private OnSubmit: () => Promise<void> = async () => {
 
-       await axios.post("http://localhost:8000/api/user/creation/",{
-            user : this.state.user , 
-            userName : this.state.userName , 
-            passWord : this.state.passWord , 
-            tel : this.state.tel , 
-            gender : this.state.gender , 
-            department : this.state.department , 
-            section : this.state.section , 
-            role : this.state.role 
-        }).then((response)=>{
-            if(response.status === 200){
-                this.props.OnStateChange(0) ;
+        await axios.post("http://localhost:8000/api/user/creation/", {
+            user: this.state.user,
+            userName: this.state.userName,
+            passWord: this.state.passWord,
+            tel: this.state.tel,
+            gender: this.state.gender,
+            department: this.state.department,
+            section: this.state.section,
+            role: this.state.role
+        }).then((response) => {
+            if (response.status === 200) {
+                this.props.OnStateChange(0);
                 Swal.fire({
                     title: "การสมัครใช้งานสำเร็จ",
                     text: "ขอบคุณที่เข้าร่วม! คุณสามารถเข้าสู่ระบบได้ทันที.",
@@ -54,24 +53,18 @@ class CreationForm extends Component<MyProps, MyState> {
                     confirmButtonText: "เข้าสู่ระบบ",
                     cancelButtonText: "ปิด",
                     showCancelButton: true,
-                  }).then((result)=>
-                  {
-                    if(result.isConfirmed)
-                    {
-                        this.props.OnStateChange(1) ;
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.props.OnStateChange(1);
                     }
-                  });
-               
+                });
+
             }
-        }).catch((err)=>
-        {
-            if(err.response.status === 400)
-            {
-                const message:string = err.response.data.message
-                this.setState({error:message});
-                document.getElementById("alertError")?.classList.remove("hidden");
-            }
-            
+        }).catch((err) => {
+            const message: string = err.response.data.message
+            this.setState({ error: message });
+            document.getElementById("alertError")?.classList.remove("hidden");
+
         })
     }
     private setUser: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (events) => {
@@ -98,7 +91,7 @@ class CreationForm extends Component<MyProps, MyState> {
     private setRole: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
         await this.setState({ role: events.target.value });
     }
-  
+
     render(): ReactNode {
         return (
             <div>
@@ -120,8 +113,14 @@ class CreationForm extends Component<MyProps, MyState> {
                             </div>
                             <div className="p-4 md:p-5">
                                 <form className="space-y-4" action="#">
-                                    <div id='alertError' className="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                                       {this.state.error}
+                                    <div id="alertError"className="hidden flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                                        <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                        </svg>
+                                        <span className="sr-only">Info</span>
+                                        <div>
+                                            {this.state.error}
+                                        </div>
                                     </div>
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อในการเข้าสู่ระบบ</label>
@@ -159,7 +158,7 @@ class CreationForm extends Component<MyProps, MyState> {
                                         </select>
 
                                     </div>
-                                    <button onClick={()=>{this.OnSubmit()}} type="button" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <button onClick={() => { this.OnSubmit() }} type="button" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         สร้างบัญชีของคุณ</button>
                                     <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                                         คุณมีบัญชีอยู่แล้ว? <button onClick={() => { this.props.OnStateChange(1) }} className="text-blue-700 hover:underline dark:text-blue-500">เข้าสู่ระบบ</button>

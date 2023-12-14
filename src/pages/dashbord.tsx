@@ -7,7 +7,7 @@ import Banner from '../components/banner';
 interface MyState{
   eFormState:number
 }
-export class Addmin extends Component<{}, MyState> {
+export class Dashboad extends Component<{}, MyState> {
   constructor(props: {}) {
     super(props);
     this.state = {

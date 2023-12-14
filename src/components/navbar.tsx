@@ -2,16 +2,18 @@ import { Component, ReactNode } from 'react';
 import { BrowserRouter as Navigate } from "react-router-dom";
 //interface
 import { user } from '../interface/accout';
+//component
+import { UserInfo } from './user_info';
 // props interface
-interface MyProps{
-    OnStateChange(newState:number):void ;
- 
+interface MyProps {
+    OnStateChange(newState: number): void;
+    dataUser:user
 }
-export class Navbar extends Component<MyProps>  {
-    constructor(props:MyProps)
-    {
+export class Navbar extends Component<MyProps >  {
+    constructor(props: MyProps) {
         super(props);
     }
+  
     render(): ReactNode {
         return (
             <>
@@ -41,32 +43,38 @@ export class Navbar extends Component<MyProps>  {
                         <div >
                             <a className='text-base font-bold text-white me-7'>Navbar Icon </a>
                         </div>
-    
                         <div >
                             <button title='จองห้องประชุม' type="button" className="font-bold text-white  hover:bg-blue-800 focus:outline-none   rounded-full text-sm px-5 py-1.5 text-center me-2 mb-2 ">
                                 จองห้องประชุม</button>
                             <button type="button" className="font-bold text-white  hover:bg-blue-800 focus:outline-none   rounded-full text-sm px-5 py-1.5 text-center me-2 mb-2 ">
                                 ห้องประชุม+สถานที่</button>
-                
+
                             <button type="button" className="relative inline-flex items-center px-5 py-1.5 text-sm font-bold me-2 mb-2 text-white bg-blue-700 rounded-full hover:bg-blue-800  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            กิจกรรม/ข่าวประชาสัมพันธ์
+                                กิจกรรม/ข่าวประชาสัมพันธ์
                                 <div className="absolute inline-flex items-center justify-center w-8 h-4 text-xs rounded-sm font-bold text-white bg-red-500  -top-2 -end-2 dark:border-gray-900">
                                     ใหม่</div>
                             </button>
                             <button type="button" className="font-bold text-white  hover:bg-blue-800 focus:outline-none   rounded-full text-sm px-5 py-1.5 text-center me-2 mb-2 ">
                                 ติดต่อเรา</button>
-                            {}
-
-                            <button onClick={()=>{this.props.OnStateChange(1)}} type="button" className="font-bold text-white  hover:text-blue-700 border border-white hover:bg-white    rounded-full text-sm px-5 py-1.5   ">
-                                <i className='fas fa-user-circle '></i> สร้างบัญชี / เข้าสู่ระบบ</button>
+                            {
+                                (this.props.dataUser.user.length > 0 )? (null) :
+                                (<button onClick={() => { this.props.OnStateChange(1) }} type="button" className="font-bold text-white  hover:text-blue-700 border border-white hover:bg-white    rounded-full text-sm px-5 py-1.5   ">
+                                <i className='fas fa-user-circle '></i> สร้างบัญชี / เข้าสู่ระบบ</button>)
+                            }
                         </div>
+                        {
+                             (this.props.dataUser.user.length > 0 ) ? ( <div>
+                                <UserInfo datauser={this.props.dataUser}/>
+                                </div>): (null)
+                        }
+                       
                     </div>
-    
+
                 </nav>
-    
+
             </>
         )
     }
-    
-    
+
+
 } 

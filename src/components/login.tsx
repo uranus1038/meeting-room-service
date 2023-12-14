@@ -1,13 +1,14 @@
 import { Component, ReactNode, ChangeEvent } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2' ;
+import Swal from 'sweetalert2';
 // key name
-import {keyName} from '../../config-web.json'
+import { keyName } from '../../config-web.json'
 //interface
 import { user } from '../interface/accout';
 /// props interface
 interface MyProps {
     OnStateChange(newState: number): void;
+    setDataUser(data: user): void;
 }
 interface MyState {
     user: string,
@@ -34,26 +35,22 @@ class LoginForm extends Component<MyProps, MyState> {
             user: this.state.user,
             passWord: this.state.passWord
         }).then((response) => {
-            if(response.status === 200)
-            {
-                localStorage.setItem(keyName,response.data.token)
-                this.props.OnStateChange(0) ;
+            if (response.status === 200) {
+                localStorage.setItem(keyName, response.data.token)
+                this.props.OnStateChange(0);
                 console.log(response.data.user);
-                
+                this.props.setDataUser(response.data.user);
                 Swal.fire({
                     title: "เข้าสู่ระบบสำเร็จ",
                     text: "เริ่มต้นใช้งานแพลตฟอร์มของเราได้ทันที.",
                     icon: "success",
                     confirmButtonText: "ตกลง",
-                  });
+                });
             }
         }).catch((err) => {
-            if(err.response.status === 400)
-            {
-                const message:string = err.response.data.message ; 
-                this.setState({error:message} )
-                document.getElementById("alertError")?.classList.remove("hidden");
-            }
+            const message: string = err.response.data.message;
+            this.setState({ error: message })
+            document.getElementById("alertError")?.classList.remove("hidden");
         })
     }
     render(): ReactNode {
@@ -78,9 +75,15 @@ class LoginForm extends Component<MyProps, MyState> {
 
                             <div className="p-4 md:p-5">
                                 <form className="space-y-4" action="#">
-                                <div id='alertError' className="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                                    {this.state.error}
-                                </div>
+                                    <div  id="alertError"className="hidden flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                                        <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                        </svg>
+                                        <span className="sr-only">Info</span>
+                                        <div>
+                                            {this.state.error}
+                                        </div>
+                                    </div>
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อผู้เข้าใช้งาน</label>
                                         <input onChange={this.setUser} type="text" name="user" id="user" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="example" required />

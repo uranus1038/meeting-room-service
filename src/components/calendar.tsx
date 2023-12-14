@@ -19,7 +19,8 @@ class Calendar extends Component<MyProps> {
 
     }
     private handleDateClick: (arg: any) => void = (arg) => {
-        this.props.OnStateChange(1)
+        this.props.OnStateChange(1) ;
+
         const dateString = '2023-01-15'; // 15 มกราคม 2023
         // เปรียบเทียบว่าวันที่ใน string เทียบกับวันนี้หรือไม่
         const currentDate = new Date().getTime();
