@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-d
 import axios from 'axios';
 //components
 import { Index } from './pages';
-import { Dashboad } from './pages/dashbord';
+import { Dashboard } from './pages/dashboard';
 // keyname
 import {keyName} from '../config-web.json'
 //interface
@@ -34,7 +34,7 @@ const App: FC = () => {
       <Router>
         <Routes>
           <Route path="/th/home" element={<Index dataUser={user} setDataUser={setUserState}/>} />
-          <Route path="/th/dashboad" element={<Dashboad />} />
+          <Route path="/th/dashboard" element={<Dashboard />} />
           <Route path="*" element={<Navigate to="/th/home" />} />
         </Routes>
       </Router>
