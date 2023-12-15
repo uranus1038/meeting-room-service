@@ -2,7 +2,9 @@
 export default {
   content: [ './src/**/*.{js,jsx,ts,tsx}', 'node_modules/flowbite-react/lib/esm/**/*.js'],
   theme: {
-    extend: {},
+    extend: { zIndex: {
+      '100': '100',
+    }},
   },
   plugins: [require('flowbite/plugin')],
 }

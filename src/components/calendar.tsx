@@ -36,8 +36,9 @@ class Calendar extends Component<MyProps> {
     };
     render(): ReactNode {
         return (
-            <div className='w-1/2 h-1/2'>
+            <div className='w-1/2 h-1/2 -z-[50'>
                 <FullCalendar
+
                     plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin, listPlugin]}
                     initialView={"dayGridMonth"}
                     headerToolbar={{

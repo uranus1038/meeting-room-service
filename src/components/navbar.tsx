@@ -30,13 +30,14 @@ export class NavbarMain extends Component<MyProps>  {
                         <span className="self-center whitespace-nowrap text-xl font-bold text-indigo-950  dark:text-white">Navbar.Brand</span>
                     </Navbar.Brand>
 
-                    <Navbar.Toggle />
+                     <Navbar.Toggle />
+
                     <Navbar.Collapse >
                         <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF] hover:text-white  rounded-full font-bold text-indigo-950'>
                             จองห้องประชุม</Button>
                         <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950'>
                             ห้องประชุม+สถานที่</Button>
-                        <Button className='relative  focus:!ring-0 h-9 bg-indigo-400 hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950 group'>
+                        <Button className='relative  focus:!ring-0 h-9 bg-indigo-200 hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950 group'>
                             กิจกรรม/ข่าวประชาสัมพันธ์   <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500  ring-2 ring-white rounded-full px-4 -top-3 -end-4 dark:border-gray-900">ใหม่</div></Button>
                         <Button className='focus:!ring-0  h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950'>
                             ติดต่อเรา</Button>
@@ -46,8 +47,7 @@ export class NavbarMain extends Component<MyProps>  {
                                 <Button className='focus:!ring-0 h-9  hover:!bg-[#7B66FF] hover:border-[#7B66FF] font-bold text hover:text-white rounded-full bg-inherit border-indigo-950 text-indigo-950' onClick={() => { this.props.OnFormUser(true, false) }}><i className='fas fa-user-circle me-2'></i>สร้างบัญชี / เข้าสู่ระบบ</Button>
                         }
                     </Navbar.Collapse>
-
-
+                  
                 </Navbar>
             </>
 

@@ -1,7 +1,14 @@
 /* style calendar */
+.fc-view{
+}
+.fc-view:hover{
+background-color: rgb(225, 225, 225,0);
+ 
+}
 .fc-daygrid-day-frame:hover
 {
   background:  rgb(225, 225, 228);
+  
 }
 .fc .fc-toolbar.fc-header-toolbar {
  background-color: none  ;
@@ -9,6 +16,7 @@
 font-size: 13px;
 }
 .fc-prev-button.fc-button.fc-button-primary ,.fc-next-button.fc-button.fc-button-primary{
+
   background-color:#5FBDFF !important;
   border: 0;
   color: white !important;
