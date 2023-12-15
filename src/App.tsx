@@ -8,6 +8,8 @@ import { Dashboard } from './pages/dashboard';
 import {keyName} from '../config-web.json'
 //interface
 import { user } from './interface/accout';
+//css
+import './index.css';
 const App: FC = () => {
   const [user , setUser ] = useState<user>({ user:"" ,userName:""  , tel:0 , gender:"" ,department:"" , section:"" , role:"" , member:""});
   useEffect(() => {
@@ -34,7 +36,9 @@ const App: FC = () => {
       <Router>
         <Routes>
           <Route path="/th/home" element={<Index dataUser={user} setDataUser={setUserState}/>} />
-          <Route path="/th/dashboard" element={<Dashboard />} />
+          {
+            (user.userName.length >0)?(<Route path="/th/dashboard" element={<Dashboard />} />):null
+          }
           <Route path="*" element={<Navigate to="/th/home" />} />
         </Routes>
       </Router>

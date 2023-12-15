@@ -1,79 +1,57 @@
 import { Component, ReactNode } from 'react';
 import { BrowserRouter as Navigate } from "react-router-dom";
+//key //key
+import { keyName } from '../../config-web.json';
 //interface
 import { user } from '../interface/accout';
 //component
+'use client';
 import { UserInfo } from './user_info';
+import { Button, Navbar,Badge} from 'flowbite-react';
+import { Alert } from './alert';
 // props interface
 interface MyProps {
-    OnStateChange(newState: number): void;
-    dataUser:user
+    OnFormUser(newState: boolean, newState2: boolean): void;
+    dataUser: user
+    setDataUser(data: user): void;
 }
-export class Navbar extends Component<MyProps >  {
+export class NavbarMain extends Component<MyProps>  {
     constructor(props: MyProps) {
         super(props);
+        this.state = { openLogin: false };
     }
-  
     render(): ReactNode {
         return (
             <>
-                <nav className=' pt-1 pb-1 px-3.5 bg-[#7B66FF] w-full '>
-                    <div className='justify-between flex items-center'>
-                        <p className='text-xs text-white font-medium'>ระบบจองห้องประชุมออนไลน์ ในรูปแบบเว็บไซต์สำเร็จรูป รองรับการจองห้องประชุมได้ตลอด 24 ชั่วโมง</p>
-                        <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
-                            className="text-white  hover:text-slate-200  font-medium rounded-lg text-sm text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                            <i className='fas fa-question-circle text-xl'></i>
-                        </button>
-                        <div id="dropdownHover" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-                                <li>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white">
-                                        <i className='fas fa-info-circle'></i > ความช่วยเหลือ</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white">
-                                        <i className='fas fa-comment-alt'></i> คำถามที่พบบ่อย</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-                <nav className='  p-3.5 bg-blue-900 w-full  '>
-                    <div className='justify-between flex items-center'>
-                        <div >
-                            <a className='text-base font-bold text-white me-7'>Navbar Icon </a>
-                        </div>
-                        <div >
-                            <button title='จองห้องประชุม' type="button" className="font-bold text-white  hover:bg-blue-800 focus:outline-none   rounded-full text-sm px-5 py-1.5 text-center me-2 mb-2 ">
-                                จองห้องประชุม</button>
-                            <button type="button" className="font-bold text-white  hover:bg-blue-800 focus:outline-none   rounded-full text-sm px-5 py-1.5 text-center me-2 mb-2 ">
-                                ห้องประชุม+สถานที่</button>
+                <Alert />
+                <Navbar fluid className='p-3.5 drop-shadow-lg w-full'>
+                    <Navbar.Brand >
+                        {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
+                        <span className="self-center whitespace-nowrap text-xl font-bold text-indigo-950  dark:text-white">Navbar.Brand</span>
+                    </Navbar.Brand>
 
-                            <button type="button" className="relative inline-flex items-center px-5 py-1.5 text-sm font-bold me-2 mb-2 text-white bg-blue-700 rounded-full hover:bg-blue-800  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                กิจกรรม/ข่าวประชาสัมพันธ์
-                                <div className="absolute inline-flex items-center justify-center w-8 h-4 text-xs rounded-sm font-bold text-white bg-red-500  -top-2 -end-2 dark:border-gray-900">
-                                    ใหม่</div>
-                            </button>
-                            <button type="button" className="font-bold text-white  hover:bg-blue-800 focus:outline-none   rounded-full text-sm px-5 py-1.5 text-center me-2 mb-2 ">
-                                ติดต่อเรา</button>
-                            {
-                                (this.props.dataUser.user.length > 0 )? (null) :
-                                (<button onClick={() => { this.props.OnStateChange(1) }} type="button" className="font-bold text-white  hover:text-blue-700 border border-white hover:bg-white    rounded-full text-sm px-5 py-1.5   ">
-                                <i className='fas fa-user-circle '></i> สร้างบัญชี / เข้าสู่ระบบ</button>)
-                            }
-                        </div>
+                    <Navbar.Toggle />
+                    <Navbar.Collapse >
+                        <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF] hover:text-white  rounded-full font-bold text-indigo-950'>
+                            จองห้องประชุม</Button>
+                        <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950'>
+                            ห้องประชุม+สถานที่</Button>
+                        <Button className='relative  focus:!ring-0 h-9 bg-indigo-400 hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950 group'>
+                            กิจกรรม/ข่าวประชาสัมพันธ์   <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500  ring-2 ring-white rounded-full px-4 -top-3 -end-4 dark:border-gray-900">ใหม่</div></Button>
+                        <Button className='focus:!ring-0  h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950'>
+                            ติดต่อเรา</Button>
                         {
-                             (this.props.dataUser.user.length > 0 ) ? ( <div>
-                                <UserInfo datauser={this.props.dataUser}/>
-                                </div>): (null)
+                            (this.props.dataUser.user.length > 0) ? (<UserInfo datauser={this.props.dataUser} setDataUser={this.props.setDataUser} />) :
+
+                                <Button className='focus:!ring-0 h-9  hover:!bg-[#7B66FF] hover:border-[#7B66FF] font-bold text hover:text-white rounded-full bg-inherit border-indigo-950 text-indigo-950' onClick={() => { this.props.OnFormUser(true, false) }}><i className='fas fa-user-circle me-2'></i>สร้างบัญชี / เข้าสู่ระบบ</Button>
                         }
-                       
-                    </div>
+                    </Navbar.Collapse>
 
-                </nav>
 
+                </Navbar>
             </>
-        )
+
+        );
     }
 
 

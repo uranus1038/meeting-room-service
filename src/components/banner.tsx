@@ -3,7 +3,7 @@ import { Component, ReactNode } from 'react';
 import Calendar from './calendar';
 // props interface 
 interface MyProps {
-    OnStateChange(newState: number):void;
+    OnFormUser(newState: boolean ,newState2:boolean):void;
   }
 
 class Banner extends Component<MyProps> {
@@ -14,7 +14,7 @@ class Banner extends Component<MyProps> {
         return (
             <div>
                 <div className=' container mx-auto justify-end flex my-5'>
-                    <Calendar OnStateChange={this.props.OnStateChange} />
+                    <Calendar OnFormUser={this.props.OnFormUser} />
                 </div>
 
             </div>

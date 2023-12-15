@@ -4,13 +4,14 @@ import { BrowserRouter as Navigate } from "react-router-dom";
 import Banner from '../components/banner';
 // components
 import LoginForm from '../components/login';
-import { Navbar } from '../components/navbar';
+import { NavbarMain } from '../components/navbar';
 import CreationForm from '../components/creation';
 //interface
 import {user} from '../interface/accout';
 //state
 interface MyState{
-  eFormState:number
+  isLoginForm:boolean 
+  isCreation:boolean
 }
 interface MyProps{
   dataUser:user
@@ -20,22 +21,21 @@ export class Index extends Component<MyProps, MyState> {
   constructor(props: MyProps) {
     super(props);
     this.state = {
-      eFormState: 0,
+      isLoginForm: false,
+      isCreation : false,
     };
   }
-  private setStateForm:(newState: number) => void =  (newState)=>
+  private setForm:(newState: boolean , newState2:boolean) => void =  (newState,newState2)=>
   {
-       this.setState({eFormState : newState});
+       this.setState({isLoginForm : newState , isCreation:newState2});
   }
-
   render(): ReactNode {
-    const {eFormState} = this.state ;
     return (
       <>
-        <Navbar OnStateChange={this.setStateForm} dataUser={this.props.dataUser}/>
-        <Banner OnStateChange={this.setStateForm} />
-        {(eFormState !== 1 && eFormState !== 2)? (<p></p>) : ((eFormState === 2) ? 
-        (<CreationForm OnStateChange={this.setStateForm}/>):(<LoginForm OnStateChange={this.setStateForm} setDataUser={this.props.setDataUser}/>))}
+        <NavbarMain OnFormUser={this.setForm} dataUser={this.props.dataUser} setDataUser={this.props.setDataUser}/>
+        <Banner OnFormUser={this.setForm} />
+        <LoginForm setDataUser={this.props.setDataUser} LoginModal={this.state.isLoginForm} OnFormUser={this.setForm}/>
+        <CreationForm OnFormUser={this.setForm} CreationModal={this.state.isCreation}/>
       </>
 
     )

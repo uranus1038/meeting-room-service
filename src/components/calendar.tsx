@@ -10,7 +10,7 @@ import listPlugin from '@fullcalendar/list';
 import '../assets/css/main.css'
 // props interface 
 interface MyProps {
-    OnStateChange: (newState: number) => void;
+    OnFormUser: (newState: boolean ,newState2:boolean) => void;
 }
 class Calendar extends Component<MyProps> {
     constructor(props: MyProps) {
@@ -19,7 +19,7 @@ class Calendar extends Component<MyProps> {
 
     }
     private handleDateClick: (arg: any) => void = (arg) => {
-        this.props.OnStateChange(1) ;
+        this.props.OnFormUser(true,false) ;
 
         const dateString = '2023-01-15'; // 15 มกราคม 2023
         // เปรียบเทียบว่าวันที่ใน string เทียบกับวันนี้หรือไม่
@@ -55,7 +55,7 @@ class Calendar extends Component<MyProps> {
                     locale={thLocale}
                     showNonCurrentDates={false}
                     events={[
-                        { title: 'Event 1', start: '2023-12-01', end: '2023-12-05', color: "" },
+                        { title: 'Event 1', start: '2023-12-01', end: '2023-12-05', color: "#5FBDFF" },
                         { title: 'Event 1', start: '2023-12-01', end: '2023-12-01', color: "" },
                         { title: 'Event 1', start: '2023-12-01T10:30:00', end: '2023-12-03T10:35:00', color: "" },
                     ]}

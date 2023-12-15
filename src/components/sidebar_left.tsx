@@ -29,7 +29,7 @@ export class SidebarLeft extends Component<{}, MyState> {
                         </a>
                         <ul className="space-y-2 font-medium">
                             <li>
-                                <Link to={"/"} relative="path" >
+                                <Link to={"/th/home"} relative="path" >
                                     <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-700 dark:hover:bg-gray-700 group" >
                                         <span><i className="text-xl fa-solid fas fa-home textc-enter text-gray-500 w-5 h-5 group-hover:text-white"></i></span>
                                         <span className="ms-3 font-medium group-hover:text-white">หน้าแรก</span>
