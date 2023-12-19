@@ -37,7 +37,8 @@ const App: FC = () => {
         <Routes>
           <Route path="/th/home" element={<Index dataUser={user} setDataUser={setUserState}/>} />
           {
-            (user.userName.length >0)?(<Route path="/th/dashboard" element={<Dashboard />} />):null
+            (user.userName.length >0)?(<Route path="/th/dashboard" element={<Dashboard dataUser={user} setDataUser={setUserState}/>} />):null
+
           }
           <Route path="*" element={<Navigate to="/th/home" />} />
         </Routes>
