@@ -33,7 +33,7 @@ export class Index extends Component<MyProps, MyState> {
     return (
       <>
         <NavbarMain OnFormUser={this.setForm} dataUser={this.props.dataUser} setDataUser={this.props.setDataUser}/>
-        <Banner OnFormUser={this.setForm} />
+        <Banner OnFormUser={this.setForm} data={this.props.dataUser}/>
         <LoginForm setDataUser={this.props.setDataUser} LoginModal={this.state.isLoginForm} OnFormUser={this.setForm}/>
         <CreationForm OnFormUser={this.setForm} CreationModal={this.state.isCreation}/>
       </>

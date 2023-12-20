@@ -60,8 +60,6 @@ export class UserInfo extends Component<MyProps, MyState> {
                     <div>{userName}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">@{user}</div>
                 </div>
-           
-         
             </div>
 
         )

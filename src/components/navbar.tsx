@@ -50,6 +50,7 @@ export class NavbarMain extends Component<MyProps>  {
                     </Navbar.Collapse>
                   
                 </Navbar>
+                
             </>
 
         );
