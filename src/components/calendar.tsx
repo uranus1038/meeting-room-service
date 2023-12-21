@@ -34,17 +34,29 @@ class Calendar extends Component<MyProps, MyState> {
     }
     private handleDateClick: (arg: any) => void = (arg) => {
         if (this.props.data.user.length > 0) {
-            const currentDate:Date = new Date();
-            const eventDate:Date = new Date(arg.dateStr);
-            if (currentDate > eventDate && currentDate.getDate() !== eventDate.getDate() )
-            {
+            const currentDate: Date = new Date();
+            const eventDate: Date = new Date(arg.dateStr);
+            var targetTime:Date = new Date();
+            targetTime.setHours(18, 0, 0, 0);
+            if (currentDate > eventDate && currentDate.getDate() !== eventDate.getDate() ) {
                 alert("ขออภัย, ไม่สามารถทำการจองย้อนหลังได้ กรุณาตรวจสอบเงื่อนไขการใช้งาน");
-               
-            }else
-            {
+            } else {
+                if( currentDate.getTime() < targetTime.getTime() )
+                {
+                    this.setState({ isBookingModal: true });
+                    this.setState({ dateStr: arg.dateStr });
+                }else
+                {
+                    if(currentDate.getDate() !== eventDate.getDate())
+                    {
+                        this.setState({ isBookingModal: true });
+                        this.setState({ dateStr: arg.dateStr });
+                    }else
+                    {
+                        alert("ขออภัย, ไม่สามารถทำการจองย้อนหลังได้เนื่องจากเลยเวลาที่กำหนดไว้แล้ว");
+                    }
+                }
                 
-                this.setState({ isBookingModal: true });
-                this.setState({ dateStr: arg.dateStr });
             }
         } else {
             this.props.OnFormUser(true, false);
@@ -67,9 +79,9 @@ class Calendar extends Component<MyProps, MyState> {
         return (
             <div className='w-1/2 h-1/2 '>
                 <Button.Group className='my-1'>
-                    <Button className='font-bold text-indigo-950' color="gray"><i className='fas fa-search me-2'></i> ค้นหาห้อง</Button>
+                    <Button className='font-bold text-indigo-950' color="gray"><i className='fas fa-search me-2'></i> ค้นหาห้องประชุม</Button>
                     <Button className='font-bold text-indigo-950' color="gray"><i className='fas fa-list me-2'></i> รายการของฉัน</Button>
-                    <Button className='font-bold text-indigo-950' color="gray"><i className='fas fa-info-circle me-2'></i> รายละเอียดห้อง</Button>
+                    <Button className='font-bold text-indigo-950' color="gray"><i className='fas fa-info-circle me-2'></i> รายละเอียดห้องประชุม</Button>
                 </Button.Group>
                 <Select className='my-1 font-bold text-indigo-950 ' id="countries" required>
                     <option >ห้องประชุม</option>
@@ -95,15 +107,16 @@ class Calendar extends Component<MyProps, MyState> {
                     locale={thLocale}
                     showNonCurrentDates={false}
                     events={[
-                        { title: 'Event 1', start: '2023-12-01', end: '2023-12-05', color: "#5FBDFF" },
-                        { title: 'Event 1', start: '2023-12-01', end: '2023-12-01', color: "" },
-                        { title: 'Event 1', start: '2023-12-01T10:30:00', end: '2023-12-03T10:35:00', color: "" },
+                        { title: 'Event 1', start: '2023-12-03T10:30:00', end: '2023-12-03T10:35:00', color: "#5FBDFF" },
+                        { title: 'Event 1', start: '2023-12-03T10:50:00', end: '2023-12-03T10:35:00', color: "#5FBDFF" },
+                        { title: 'Event 1', start: '2023-12-03T10:30:00', end: '2023-12-05T10:35:00', color: "#5FBDFF" },
+                    
                     ]}
                     dayMaxEvents={1}
 
                     dateClick={this.handleDateClick}
                 />
-                <Booking bookingModal={this.state.isBookingModal} onBooking={this.setBooking} dateStr={this.state.dateStr} />
+                <Booking data={this.props.data} bookingModal={this.state.isBookingModal} onBooking={this.setBooking} dateStr={this.state.dateStr} />
             </div>
 
         );

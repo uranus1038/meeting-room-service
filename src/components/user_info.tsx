@@ -48,7 +48,7 @@ export class UserInfo extends Component<MyProps, MyState> {
                     arrowIcon={false}
                     inline
                     label={
-                        <Avatar alt="User settings" size={"md"} status='online' rounded />
+                        <Avatar alt="User settings" size={"sm"} status='online' rounded />
                     }
                 >
                     <Link to={"/th/dashboard"}>

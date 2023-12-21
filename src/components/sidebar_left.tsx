@@ -44,29 +44,32 @@ export class SidebarLeft extends Component<MyProps, MyState> {
                                 (this.props.dataUser.member === "member") ?
                                     (
                                         <>
+                                            <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>รายการ</span></Sidebar.Item>
+                                            <Link to={"/th/home"}><Sidebar.Item><i className=' fas fa-home me-2'></i><span className="text-sm">หน้าแรก</span></Sidebar.Item></Link>
+                                            <Sidebar.Item href="#"><i className='fas  fa-chart-pie me-2'></i><span className="text-sm">แดชบอร์ด</span></Sidebar.Item>
                                             <Link to={"/th/home"}>
-                                                <Sidebar.Item><i className='fas fa-home me-2 '></i>หน้าแรก</Sidebar.Item>
-                                                </Link>
+                                                <Sidebar.Item><i className='fas fa-calendar me-2'></i><span className="text-sm">จองห้องประชุม</span></Sidebar.Item>
+                                            </Link>
                                             <Link to={"/th/home"}>
-                                                <Sidebar.Item><i className='fas fa-calendar me-2'></i>จองห้องประชุม</Sidebar.Item>
-                                                </Link>
+                                                <Sidebar.Item><i className='fa-solid fa-vector-square me-2'></i><span className="text-sm">รายละเอียดห้องประชุม</span></Sidebar.Item>
+                                            </Link>
                                             <Link to={"/th/home"}>
-                                                <Sidebar.Item><i className="fa-solid fa-clipboard-list me-2"></i>รายการของฉัน</Sidebar.Item>
-                                                </Link>
+                                                <Sidebar.Item><i className="fa-solid fa-clipboard-list me-2"></i><span className="text-sm">รายการของฉัน</span></Sidebar.Item>
+                                            </Link>
                                             <Link to={"/th/home"}>
-                                                <Sidebar.Item href="#" label="3" ><i className='fas fa-bell me-2'></i>การแจ้งเตือน</Sidebar.Item>
-                                                </Link>
+                                                <Sidebar.Item href="#" label="3" ><i className='fas fa-bell me-2'></i><span className="text-sm">การแจ้งเตือน</span></Sidebar.Item>
+                                            </Link>
                                             <Link to={"/th/home"}>
-                                                <Sidebar.Item label="PRO" labelColor="red"><i className='fa-brands fa-line me-2'></i>การแจ้งเตือนผ่านไลน์</Sidebar.Item>
-                                                </Link>
+                                                <Sidebar.Item label="PRO" labelColor="red"><i className='fa-brands fa-line me-2'></i><span className="text-sm">การแจ้งเตือนผ่านไลน์</span></Sidebar.Item>
+                                            </Link>
                                         </>
                                     ) : (
                                         <>
-                                            <Sidebar.Item ><span className='text-xs font-medium'>แดชบอร์ด</span></Sidebar.Item>
+                                            <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>แดชบอร์ด</span></Sidebar.Item>
                                             <Link to={"/th/home"}><Sidebar.Item><i className=' fas fa-home me-2'></i><span className="text-sm">หน้าแรก</span></Sidebar.Item></Link>
-                                            <Sidebar.Item href="#"><i className='fas fa-user me-2'></i><span className="text-sm">แดชบอร์ด</span></Sidebar.Item>
+                                            <Sidebar.Item href="#"><i className='fas fa-chart-pie me-2'></i><span className="text-sm">แดชบอร์ด</span></Sidebar.Item>
 
-                                            <Sidebar.Item ><span className='text-xs font-medium'>ผู้ใช้งาน</span></Sidebar.Item>
+                                            <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>ผู้ใช้งาน</span></Sidebar.Item>
                                             <Sidebar.Item href="#"><i className='fas fa-user me-2'></i><span className="text-sm">จัดการสมาชิก</span></Sidebar.Item>
                                             <Sidebar.Item href="#"><i className="fa-solid fa-address-book me-2"></i><span className="text-sm">บทบาทและหน้าที่  </span></Sidebar.Item>
 
@@ -86,20 +89,20 @@ export class SidebarLeft extends Component<MyProps, MyState> {
                                                 <Sidebar.Item ><i className='fas fa-pen me-2 '></i><span className="text-sm"> ตำแหน่ง</span></Sidebar.Item>
                                             </SidebarCollapse>
 
-                                            <Sidebar.Item ><span className='text-xs font-medium'>จองห้องประชุม</span></Sidebar.Item>
+                                            <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>จองห้องประชุม</span></Sidebar.Item>
                                             <Link to={"/th/home"}><Sidebar.Item><i className='fas fa-calendar me-2'></i><span className="text-sm"> จองห้องประชุม</span></Sidebar.Item></Link>
                                             <Sidebar.Item ><i className="fa-solid fa-calendar-check me-2"></i><span className="text-sm"> อนุมัติการจอง</span></Sidebar.Item>
                                             <Sidebar.Item ><i className="fa-solid fa-table me-2"></i><span className="text-sm"> ข้อมูลการจองทั้งหมด</span></Sidebar.Item>
 
-                                            <Sidebar.Item ><span className='text-xs font-medium'>ห้องประชุม</span></Sidebar.Item>
+                                            <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>ห้องประชุม</span></Sidebar.Item>
                                             <Sidebar.Item ><i className="fa-solid fa-vector-square me-2"></i><span className="text-sm"> ข้อมูลห้องประชุม</span></Sidebar.Item>
                                             <Sidebar.Item ><i className="fa-solid fa-tablet-screen-button me-2"></i><span className="text-sm"> เครื่องมือ</span></Sidebar.Item>
                                             <Sidebar.Item ><i className="fa-solid fa-wifi me-2"></i><span className="text-sm"> บริการอื่นๆ</span></Sidebar.Item>
 
-                                            <Sidebar.Item ><span className='text-xs font-medium'>กิจกรรม</span></Sidebar.Item>
+                                            <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>กิจกรรม</span></Sidebar.Item>
                                             <Sidebar.Item ><i className="fa-solid fa-paper-plane  me-2"></i><span className="text-sm"> โพสต์กิจกรรม</span></Sidebar.Item>
 
-                                            <Sidebar.Item ><span className='text-xs font-medium'>ตั้งค่า</span></Sidebar.Item>
+                                            <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>ตั้งค่า</span></Sidebar.Item>
                                             <Sidebar.Item ><i className="fa-solid fa-gear  me-2"></i><span className="text-sm"> ตั้งค่าเว็บไซต์</span></Sidebar.Item>
                                         </>
                                     )

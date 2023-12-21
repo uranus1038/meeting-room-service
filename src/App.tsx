@@ -21,7 +21,7 @@ const App: FC = () => {
   }
   const getUserData: () => Promise<void> = async() => {
     if (localStorage.getItem(keyName) !== null) {
-    const token = await localStorage.getItem(keyName);
+    const token =  localStorage.getItem(keyName);
     await axios.get("http://localhost:8000/api/user/get-user/",{ headers: {'Authorization': `Bearer ${token}`} }).then((response)=>
     {
       if(response.status == 200)
