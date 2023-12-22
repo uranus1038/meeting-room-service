@@ -12,6 +12,7 @@ import { HiInformationCircle } from 'react-icons/hi';
 import { Modal, Alert, Button, TextInput, Datepicker, ToggleSwitch } from 'flowbite-react';
 //interface
 import { user } from "../interface/accout";
+import { eventFC } from "../interface/calendarEvent";
 interface MyState {
     day: string
     switch1: boolean
@@ -29,8 +30,9 @@ interface MyState {
 interface MyProps {
     bookingModal: boolean
     onBooking: (newState: boolean) => void;
-    dateStr: string
-    data: user
+    dateStr: string;
+    data: user;
+    getDataBooking: () => Promise<void> ;
 }
 export class Booking extends Component<MyProps, MyState>
 {
@@ -43,8 +45,12 @@ export class Booking extends Component<MyProps, MyState>
         }
     }
     private OnSubmit: () => void = async () => {
-        if (localStorage.getItem(keyName) !== null) {
+        if (this.props.data.user.toString().length > 0) {
             const token = localStorage.getItem(keyName);
+            if (this.state.start_date === "" || this.state.start_date === "") {
+                await this.setState({ start_date: this.formatDate(this.props.dateStr, "en") })
+                await this.setState({ end_date: this.formatDate(this.props.dateStr, "en") })
+            }
             await axios.post("http://localhost:8000/api/user/reserve/", {
                 user: this.props.data.user, userName: this.props.data.userName,
                 tel: this.props.data.tel, title: this.state.title, start_time: this.state.start_time,
@@ -54,15 +60,41 @@ export class Booking extends Component<MyProps, MyState>
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            }).then().catch((error) => {
+            }).then(response=>{
+                if(response.status === 200)
+                {
+                    this.props.getDataBooking();
+                    this.props.onBooking(false)
+                    Swal.fire({
+                        title: "การการจองห้องประชุมเสร็จสมบูรณ์",
+                        text: "ยินดีด้วย! การจองห้องประชุมของท่านเสร็จสมบูรณ์ หากมีคำถามหรือความต้องการเพิ่มเติม โปรดแจ้งให้เราทราบ",
+                        icon: "success",
+                        confirmButtonText: "ตกลง",
+                    })
+                }
+            }
+            ).catch((error) => {
+                if(error.response.status === 409)
+                {
+                    Swal.fire({
+                        title: "Oops! การจองไม่สำเร็จ",
+                        text: "ดูเหมือนว่าวันเวลานี้จะถูกจองโดยผู้ใช้งานท่านอื่นไปแล้วสิ น่าเสียดายจริงๆลองเลือกวันเวลาอื่นดูนะ",
+                        icon: "error",
+                        confirmButtonText: "ตกลง",
+                    })
+                }
                 if (error.response.status === 401) {
+                    this.props.onBooking(false)
                     Swal.fire({
                         title: "เซสชั่นหมดอายุ",
-                        text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณ",
+                        text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณเราจึงต้องมีมาตราการในการรักษาความปลอดภัยนี้",
                         icon: "warning",
                         confirmButtonText: "ตกลง",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.hostname
+                        }
                     });
-
                 } else {
                     console.log(error.response.data);
                     this.setState({ error: error.response.data.message });
@@ -70,6 +102,7 @@ export class Booking extends Component<MyProps, MyState>
                 }
 
             });
+
         }
     }
 

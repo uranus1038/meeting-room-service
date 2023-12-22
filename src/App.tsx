@@ -28,6 +28,12 @@ const App: FC = () => {
       {
         setUser(response.data.user);
       }
+    }).catch((error) =>
+    {
+      if(error.response.status === 401)
+      {
+        localStorage.removeItem(keyName);
+      }
     })
   }
   }

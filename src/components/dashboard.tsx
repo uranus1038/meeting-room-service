@@ -7,7 +7,7 @@ export class DashboardComponent extends Component {
             <div className="ms-72 p-6">
 
 
-                <h2 className="text-xl font-bold">แดชบอร์ด</h2>
+                <h2 className="text-xl font-light">แดชบอร์ด</h2>
                 <Breadcrumb className="mt-2 " aria-label="Default breadcrumb example ">
                     <Breadcrumb.Item  >
                         หน้าหลัก

@@ -27,20 +27,20 @@ export class NavbarMain extends Component<MyProps>  {
                 <Navbar fluid className='p-3.5 drop-shadow-lg w-full  sticky top-0 z-50' >
                     <Navbar.Brand >
                         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-                        <span className="self-center whitespace-nowrap text-xl font-bold text-indigo-950  dark:text-white">Navbar.Brand</span>
+                        <span className="self-center whitespace-nowrap text-xl font-bold text-indigo-950  dark:text-white">Navbar.Brand <i className='fas text-red-500 fa-circle text-xs'></i><i className='fas fa-circle text-yellow-200 text-xs ms-1'></i><i className='ms-1 text-blue-500 fas fa-circle text-xs'></i></span>
                     </Navbar.Brand>
 
                      <Navbar.Toggle />
 
                     <Navbar.Collapse >
-                        <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF] hover:text-white  rounded-full font-bold text-indigo-950'>
+                        <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF] hover:text-white  hover:font-medium rounded-full font-bold text-indigo-950'>
                             จองห้องประชุม</Button>
-                        <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950'>
+                        <Button className='focus:!ring-0 h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold hover:font-medium text-indigo-950'>
                             ห้องประชุม+สถานที่</Button>
-                        <Button className='relative  focus:!ring-0 h-9 bg-indigo-200 hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950 group'>
+                        <Button className='relative  focus:!ring-0 h-9 bg-indigo-200 hover:!bg-[#7B66FF]  hover:text-white  rounded-full hover:font-medium font-bold  text-indigo-950 group'>
                             กิจกรรม/ข่าวประชาสัมพันธ์   <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500  ring-2 ring-white rounded-full px-4 -top-3 -end-4 dark:border-gray-900">ใหม่</div></Button>
                         
-                        <Button className='focus:!ring-0  h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full font-bold text-indigo-950'>
+                        <Button className='focus:!ring-0  h-9 bg-inherit hover:!bg-[#7B66FF]  hover:text-white  rounded-full hover:font-medium font-bold text-indigo-950'>
                             ติดต่อเรา</Button>
                         {
                             (this.props.dataUser.user.length > 0) ? (<UserInfo datauser={this.props.dataUser} setDataUser={this.props.setDataUser} />) :

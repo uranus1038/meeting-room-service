@@ -59,9 +59,6 @@ export class SidebarLeft extends Component<MyProps, MyState> {
                                             <Link to={"/th/home"}>
                                                 <Sidebar.Item href="#" label="3" ><i className='fas fa-bell me-2'></i><span className="text-sm">การแจ้งเตือน</span></Sidebar.Item>
                                             </Link>
-                                            <Link to={"/th/home"}>
-                                                <Sidebar.Item label="PRO" labelColor="red"><i className='fa-brands fa-line me-2'></i><span className="text-sm">การแจ้งเตือนผ่านไลน์</span></Sidebar.Item>
-                                            </Link>
                                         </>
                                     ) : (
                                         <>
@@ -104,6 +101,9 @@ export class SidebarLeft extends Component<MyProps, MyState> {
 
                                             <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>ตั้งค่า</span></Sidebar.Item>
                                             <Sidebar.Item ><i className="fa-solid fa-gear  me-2"></i><span className="text-sm"> ตั้งค่าเว็บไซต์</span></Sidebar.Item>
+                                            <Link to={"/th/home"}>
+                                                <Sidebar.Item label="PRO" labelColor="red"><i className='fa-brands fa-line me-2'></i><span className="text-sm">การแจ้งเตือนผ่านไลน์</span></Sidebar.Item>
+                                            </Link>
                                         </>
                                     )
 

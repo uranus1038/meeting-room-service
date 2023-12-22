@@ -52,9 +52,9 @@ export class UserInfo extends Component<MyProps, MyState> {
                     }
                 >
                     <Link to={"/th/dashboard"}>
-                        <Dropdown.Item className='font-bold items-center hover:!bg-gray-200'><i className='text-center fas fa-chart-pie me-2'></i> แดชบอร์ด</Dropdown.Item>
+                        <Dropdown.Item className='items-center hover:!bg-gray-200'><i className='text-center fas fa-chart-pie me-2'></i> แดชบอร์ด</Dropdown.Item>
                     </Link>
-                    <Dropdown.Item onClick={()=>{this.Logout()}} className='font-bold items-center hover:!bg-gray-200'><i className='text-lg fas fa-sign-out me-2'></i> ออกจากระบบ</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.Logout()}} className=' items-center hover:!bg-gray-200'><i className='text-lg fas fa-sign-out me-2'></i> ออกจากระบบ</Dropdown.Item>
                 </Dropdown>
                 <div className="ms-2 font-medium dark:text-white">
                     <div>{userName}</div>
