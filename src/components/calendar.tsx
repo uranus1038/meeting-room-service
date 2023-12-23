@@ -21,7 +21,6 @@ import { eventFC } from '../interface/calendarEvent';
 interface MyProps {
     OnFormUser: (newState: boolean, newState2: boolean) => void;
     data: user
-
 }
 // state
 interface MyState {
@@ -102,7 +101,7 @@ class Calendar extends Component<MyProps, MyState> {
         }
     };
     private handleEventClick = (info:any) => {
-       alert(info.event.info)
+       alert(info.event.title)
       };
     private handleEventMouseEnter = (info:any) => {
     
@@ -116,7 +115,7 @@ class Calendar extends Component<MyProps, MyState> {
       };
     render(): ReactNode {
         return (
-            <div className='w-1/2 h-1/2 '>
+            <>
                 <Button.Group className='my-1'>
                     <Button className=' text-indigo-950' color="gray"><i className='fas fa-search me-2'></i> ค้นหาห้องประชุม</Button>
                     <Button className=' text-indigo-950' color="gray">
@@ -158,7 +157,7 @@ class Calendar extends Component<MyProps, MyState> {
 
                 />
                 <Booking getDataBooking={this.getDataBooking} data={this.props.data} bookingModal={this.state.isBookingModal} onBooking={this.setBooking} dateStr={this.state.dateStr} />
-            </div>
+            </>
 
         );
 

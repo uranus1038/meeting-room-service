@@ -28,7 +28,7 @@ export class UserInfo extends Component<MyProps, MyState> {
 
     private Logout:()=>void=()=>{
         localStorage.removeItem(keyName);
-        this.props.setDataUser({ user:"" ,userName:""  , tel:0 , gender:"" ,department:"" , section:"" , role:"" , member:""});
+        this.props.setDataUser({ user:"" ,userName:""  , tel:0 , gender:"" ,department:"" , section:"" , role:"" , member:"" , img:""});
         Swal.fire({
             title: "ออกจากระบบสำเร็จ",
             text: "เราหวังว่าคุณจะพบประสบการณ์ที่ดีที่ใช้บริการของเรา.",

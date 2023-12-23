@@ -7,4 +7,5 @@ export interface user {
     section: string
     role: string
     member : string 
+    img:string
 }

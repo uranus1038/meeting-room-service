@@ -1,11 +1,11 @@
 import { Component, ReactNode } from "react";
 import { HiInformationCircle } from 'react-icons/hi';
 import { Card, Breadcrumb, Button } from 'flowbite-react';
+
 export class DashboardComponent extends Component {
     render(): ReactNode {
         return (
             <div className="ms-72 p-6">
-
 
                 <h2 className="text-xl font-light">แดชบอร์ด</h2>
                 <Breadcrumb className="mt-2 " aria-label="Default breadcrumb example ">
