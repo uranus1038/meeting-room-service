@@ -137,7 +137,7 @@ export class MemberList extends Component<{}, MyState> {
     {
         this.setState({nextState:newState});
     }
-    private setMemberData:(user:string, userName:string , role:string, department:string , section:string , tel:number , img:string,member:string,gender:string)=>void=(user,userName,role,section,department,tel,img,member,gender)=>
+    private setMemberData:(user:string, userName:string , role:string, department:string , section:string , tel:number , img:string,member:string,gender:string)=>void=(user,userName,role,department,section,tel,img,member,gender)=>
     {
         this.setState({memberData:{user,userName,tel,role,department,section,gender,img,member}});
     }
@@ -243,7 +243,7 @@ export class MemberList extends Component<{}, MyState> {
                                 <Pagination currentPage={this.state.currentPage} totalPages={100} onPageChange={(number) => { this.setCurrentPage(number) }} showIcons />
                             </div>
                         </>):
-                        ( <MemberFormUpdate data={this.state.memberData}/>)
+                        ( <MemberFormUpdate data={this.state.memberData} undo={this.setNextState}/>)
                 }
 
             </div>
