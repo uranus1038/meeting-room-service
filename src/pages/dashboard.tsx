@@ -40,10 +40,12 @@ export class Dashboard extends Component<MyProps, MyState> {
       isCreation: false,
     };
   }
-  componentDidMount()
-  {
+
+  componentDidMount() {
     //this.props.newLink(0);
   }
+
+
   private setForm: (newState: boolean, newState2: boolean) => void = (newState, newState2) => {
     this.setState({ isLoginForm: newState, isCreation: newState2 });
   }
@@ -78,19 +80,19 @@ export class Dashboard extends Component<MyProps, MyState> {
             <Calendar OnFormUser={this.setForm} data={this.props.dataUser} />
           </div>) : null
         }
-         {(this.props.linkState === 7) ?
+        {(this.props.linkState === 7) ?
           (<ApproveComponent />) : null
         }
         {(this.props.linkState === 8) ?
           (<BookingComponent />) : null
         }
-          {(this.props.linkState === 9) ?
+        {(this.props.linkState === 9) ?
           (<MeetimgListComponent />) : null
         }
         {(this.props.linkState === 10) ?
           (<ToolComponent />) : null
         }
-           {(this.props.linkState === 11) ?
+        {(this.props.linkState === 11) ?
           (<ServiceComponent />) : null
         }
       </>

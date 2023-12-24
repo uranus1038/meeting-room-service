@@ -42,9 +42,8 @@ export class SidebarLeftAdmin extends Component<MyProps, MyState> {
                     <hr />
                     <Sidebar.Items className='mt-5 '>
                         <Sidebar.ItemGroup>
-
                             <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>แดชบอร์ด</span></Sidebar.Item>
-                            <Link to={"/th/home"}><Sidebar.Item><i className=' fas fa-home me-2'></i><span className="text-sm">หน้าแรก</span></Sidebar.Item></Link>
+                            <Link to={"/th/home"}><Sidebar.Item><i className=' fas  fa-home me-2'></i><span className="text-sm">หน้าแรก</span></Sidebar.Item></Link>
                             <button className='w-full text-start '
                                 onClick={() => { this.props.newLink(0) }}><Sidebar.Item ><i className='fas fa-chart-pie me-2'></i><span className="text-sm">แดชบอร์ด</span></Sidebar.Item></button>
                             <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>ผู้ใช้งาน</span></Sidebar.Item>
@@ -63,7 +62,6 @@ export class SidebarLeftAdmin extends Component<MyProps, MyState> {
                                 theme={{ icon: { base: "h-5 w-5 mb-1 ms-3" } }}
                                 icon={HiUserGroup}
                                 label="ผู้ใช้งาน"
-
                                 renderChevronIcon={(theme, open) => {
                                     const IconComponent = open ? HiOutlineMinusSm : HiOutlinePlusSm;
 
