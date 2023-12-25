@@ -40,7 +40,6 @@ export class SidebarLeftAdmin extends Component<MyProps, MyState> {
 
                     </div>
                     <hr />
-                    <Sidebar.Items className='mt-5 '>
                         <Sidebar.ItemGroup>
                             <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>แดชบอร์ด</span></Sidebar.Item>
                             <Link to={"/th/home"}><Sidebar.Item><i className=' fas  fa-home me-2'></i><span className="text-sm">หน้าแรก</span></Sidebar.Item></Link>
@@ -122,7 +121,6 @@ export class SidebarLeftAdmin extends Component<MyProps, MyState> {
                             <Sidebar.Item href="#" ><i className='fas fa-sign-out me-2'></i>ออกจากระบบ</Sidebar.Item>
 
                         </Sidebar.ItemGroup>
-                    </Sidebar.Items>
                     <Sidebar.CTA>
                         <div className="mb-3 flex items-center"><Badge color="warning">Beta</Badge></div>
                         <div className="mb-3 text-sm text-indigo-950 dark:text-gray-400">

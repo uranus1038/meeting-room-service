@@ -3,6 +3,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 //components
 import { Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
+//interface
+import { position } from '../interface/position';
 // props interface
 interface MyProps {
     OnFormUser(newState: boolean, newState2: boolean): void;
@@ -14,10 +16,14 @@ interface MyState {
     userName: string
     passWord: string
     tel: number
-    department: string
-    section: string
-    role: string
+    department: position[];
+    position: position[];
+    section: position[];
     error: string
+    currentDepartment: string;
+    currentPosition: string;
+    currentSection: string;
+
 }
 class CreationForm extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
@@ -28,11 +34,22 @@ class CreationForm extends Component<MyProps, MyState> {
             userName: "",
             passWord: "",
             tel: 0,
-            department: "---",
-            section: "---",
-            role: "---",
-            error: ""
+            department: [],
+            section: [],
+            position: [],
+            error: "",
+            currentDepartment: "ฝ่าย",
+            currentPosition: "ตำแหน่ง",
+            currentSection: "แผนก"
+
         };
+    }
+    componentDidMount() {
+        this.fecthAll();
+    }
+    private fecthAll(): void {
+        this.fecthDepartment();
+        this.fecthPosition();
     }
     private OnSubmit: () => Promise<void> = async () => {
 
@@ -42,12 +59,12 @@ class CreationForm extends Component<MyProps, MyState> {
             passWord: this.state.passWord,
             tel: this.state.tel,
             gender: this.state.gender,
-            department: this.state.department,
-            section: this.state.section,
-            role: this.state.role
+            department: this.state.currentDepartment,
+            section: this.state.currentSection,
+            role: this.state.currentPosition
         }).then((response) => {
             if (response.status === 200) {
-                this.props.OnFormUser(false,false);
+                this.props.OnFormUser(false, false);
                 Swal.fire({
                     title: "การสมัครใช้งานสำเร็จ",
                     text: "ขอบคุณที่เข้าร่วม! คุณสามารถเข้าสู่ระบบได้ทันที.",
@@ -57,7 +74,7 @@ class CreationForm extends Component<MyProps, MyState> {
                     showCancelButton: true,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        this.props.OnFormUser(true,false);
+                        this.props.OnFormUser(true, false);
                     }
                 });
             }
@@ -65,6 +82,112 @@ class CreationForm extends Component<MyProps, MyState> {
             const message: string = err.response.data.message
             this.setState({ error: message });
             document.getElementById("alertError")?.classList.remove("hidden");
+
+        })
+    }
+
+    private fecthDepartment: () => void = async () => {
+        await axios.get(`http://localhost:8000/api/user/department/`,).then((response) => {
+            if (response.status === 200) {
+
+                const newArray: position[] = response.data.department.map((obj: position) => {
+                    return {
+                        ...obj
+                    }
+                }
+                );
+                this.setState({ department: newArray });
+
+            } else {
+            }
+
+        }).catch((error) => {
+            if (error.response.status === 404) {
+                this.setState({ department: [] });
+            } else {
+                if (error.response.status === 401) {
+                    Swal.fire({
+                        title: "เซสชั่นหมดอายุ",
+                        text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณเราจึงต้องมีมาตราการในการรักษาความปลอดภัยนี้",
+                        icon: "warning",
+                        confirmButtonText: "ตกลง",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.hostname
+                        }
+                    });
+                }
+            }
+
+        })
+    }
+    private fecthPosition: () => void = async () => {
+        await axios.get(`http://localhost:8000/api/user/position/`).then((response) => {
+            if (response.status === 200) {
+
+                const newArray: position[] = response.data.position.map((obj: position) => {
+                    return {
+                        ...obj
+                    }
+                }
+                );
+                this.setState({ position: newArray });
+
+            } else {
+            }
+
+        }).catch((error) => {
+            if (error.response.status === 404) {
+                this.setState({ position: [] });
+            } else {
+                if (error.response.status === 401) {
+                    Swal.fire({
+                        title: "เซสชั่นหมดอายุ",
+                        text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณเราจึงต้องมีมาตราการในการรักษาความปลอดภัยนี้",
+                        icon: "warning",
+                        confirmButtonText: "ตกลง",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.hostname
+                        }
+                    });
+                }
+            }
+
+        })
+    }
+    private fecthSection: (department: string) => void = async (department) => {
+        await axios.get(`http://localhost:8000/api/user/section/${department}`).then((response) => {
+            if (response.status === 200) {
+
+                const newArray: position[] = response.data.section.map((obj: position) => {
+                    return {
+                        ...obj
+                    }
+                }
+                );
+                this.setState({ section: newArray });
+
+            } else {
+            }
+
+        }).catch((error) => {
+            if (error.response.status === 404) {
+                this.setState({ section: [] });
+            } else {
+                if (error.response.status === 401) {
+                    Swal.fire({
+                        title: "เซสชั่นหมดอายุ",
+                        text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณเราจึงต้องมีมาตราการในการรักษาความปลอดภัยนี้",
+                        icon: "warning",
+                        confirmButtonText: "ตกลง",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.hostname
+                        }
+                    });
+                }
+            }
 
         })
     }
@@ -84,13 +207,14 @@ class CreationForm extends Component<MyProps, MyState> {
         await this.setState({ tel: Number.parseInt(events.target.value) });
     }
     private setDepartment: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
-        await this.setState({ department: events.target.value });
+        await this.setState({ currentDepartment: events.target.value });
+        await this.fecthSection(this.state.currentDepartment);
     }
     private setSection: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
-        await this.setState({ section: events.target.value });
+        await this.setState({ currentSection: events.target.value });
     }
-    private setRole: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
-        await this.setState({ role: events.target.value });
+    private setPostion: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (events) => {
+        await this.setState({ currentPosition: events.target.value });
     }
 
     render(): ReactNode {
@@ -135,23 +259,38 @@ class CreationForm extends Component<MyProps, MyState> {
 
                                 <div className="flex">
                                     <select onChange={this.setDepartment} id="department" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                                        <option selected>ฝ่าย</option>
+                                    <option value={this.state.currentDepartment} selected>{this.state.currentDepartment}</option>
+                                        {this.state.department.map((e, i) => (
+                                            <option key={i} value={e.department}>
+                                                {e.department}
+                                            </option>
+                                        ))}
 
                                     </select>
                                     <select onChange={this.setSection} id="section" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300  hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                                        <option selected>---</option>
+                                        <option value={this.state.currentSection} selected>{this.state.currentSection}</option>
+                                        {this.state.section.map((e, i) => (
+                                            <option key={i} value={e.section}>
+                                                {e.section}
+                                            </option>
+                                        ))}
 
                                     </select>
-                                    <select onChange={this.setRole} id="role" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                                        <option selected>---</option>
+                                    <select onChange={this.setPostion} id="positon" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
+                                    <option value={this.state.currentPosition} selected>{this.state.currentPosition}</option>
 
+                                        {this.state.position.map((e, i) => (
+                                            <option key={i} value={e.role}>
+                                                {e.role}
+                                            </option>
+                                        ))}
                                     </select>
 
                                 </div>
-                                <button onClick={() => { this.OnSubmit() }} type="button" className="w-full text-white bg-[#7B66FF] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                <button onClick={() => { this.OnSubmit() }} type="button" className="w-full text-white bg-[#7B66FF] hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     สร้างบัญชีของคุณ</button>
                                 <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                                    คุณมีบัญชีอยู่แล้ว? <button onClick={() => {  this.props.OnFormUser(true, false)}} className="text-blue-700 hover:underline dark:text-blue-500">เข้าสู่ระบบ</button>
+                                    คุณมีบัญชีอยู่แล้ว? <button onClick={() => { this.props.OnFormUser(true, false) }} className="text-blue-700 hover:underline dark:text-blue-500">เข้าสู่ระบบ</button>
                                 </div>
                             </form>
                         </div>

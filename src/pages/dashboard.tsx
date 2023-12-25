@@ -52,7 +52,7 @@ export class Dashboard extends Component<MyProps, MyState> {
   render(): ReactNode {
     return (
       <>
-        {(this.props.dataUser.member === "admin") ? (
+        {(this.props.dataUser.member !== "member") ? (
           <><SidebarLeftAdmin newLink={this.props.newLink} dataUser={this.props.dataUser} setDataUser={this.props.setDataUser} /></>) :
           (<><SidebarLeftMember dataUser={this.props.dataUser} setDataUser={this.props.setDataUser} /></>)}
         <Navbar2 />

@@ -8,35 +8,42 @@ import { Avatar, Button, Select, Breadcrumb, Pagination } from 'flowbite-react';
 // interface
 import { user } from "../interface/accout";
 import { MemberFormUpdate } from "./member_update";
+import CreationForm from "./creation";
+import Addmember from "./AddUser";
 
 interface MyState {
     currentPage: number
     rows: number;
     data: user[]
-    memberData:user
+    memberData: user
     selectedRows: boolean[]
     selectBox: boolean[]
     selectBoxAll: boolean
-    nextState:number
+    nextState: number
+    deleteUser: boolean
 }
 export class MemberList extends Component<{}, MyState> {
     constructor(props: {}) {
         super(props)
         this.state = {
-            memberData: {user:"" ,userName:"" , role:"" , tel:0 , department:"" ,section:"" , gender:"",img:"" , member:"" } ,
-            nextState:0, rows: 10, currentPage: 1, data: [], selectedRows: [], selectBox: [], selectBoxAll: false }
+            deleteUser: false,
+            memberData: { user: "", userName: "", role: "", tel: 0, department: "", section: "", gender: "", img: "", member: "" },
+            nextState: 0, rows: 10, currentPage: 1, data: [], selectedRows: [], selectBox: [], selectBoxAll: false
+        }
     }
     componentDidMount() {
         this.getDataUserAll(0, 9);
     }
     private getDataUserAll: (rows_a: number, rows_b: number) => void = async (rows_a, rows_b) => {
+        this.setState({ selectBox: [] });
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
             await axios.get(`http://localhost:8000/api/admin/get-user/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
                 if (response.status === 200) {
-
                     const newArray: user[] = response.data.accouts.map((obj: user) => {
-                        this.state.selectBox.push(false)
+                        if (this.state.selectBox.length < response.data.accouts.length) {
+                            this.state.selectBox.push(false)
+                        }
                         return {
                             ...obj
                         }
@@ -45,7 +52,6 @@ export class MemberList extends Component<{}, MyState> {
                     this.setState({ data: newArray });
 
                 } else {
-                    console.log("asxxd");
                 }
 
             }).catch((error) => {
@@ -75,12 +81,96 @@ export class MemberList extends Component<{}, MyState> {
         }
 
     }
-    private handleCheckboxChange: (index: number) => void = (index) => {
+    private DeleteUser: (user: string) => void = async (user) => {
+        this.setState({ selectBox: [] });
+        if (localStorage.getItem(keyName) !== null) {
+            const token = localStorage.getItem(keyName);
+            await axios.get(`http://localhost:8000/api/admin/delete-member/${user}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
+                if (response.status === 204) {
+                    this.getDataUserAll(0, 9);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "bottom-end",
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: "ลบสมาชิกเสร็จสิ้น"
+                    });
+                }
+            }).catch((error) => {
+                if (error.response.status === 403) {
+                    localStorage.removeItem(keyName);
+                    window.location.href = window.location.hostname;
+                    console.log("403 ไม่สามารถเข้าถึงข้อมูลได้");
 
+                } else if (error.response.status === 404) {
+                    this.setState({ data: [] });
+                } else {
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            title: "เซสชั่นหมดอายุ",
+                            text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณเราจึงต้องมีมาตราการในการรักษาความปลอดภัยนี้",
+                            icon: "warning",
+                            confirmButtonText: "ตกลง",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = window.location.hostname
+                            }
+                        });
+                    }
+                }
 
+            })
+        }
+
+    }
+    private OnDeleteUser:()=>Promise<void>=async()=>{
+        Swal.fire({
+            title: "คำเตือน",
+            text: "การลบสมาชิกจะทำให้คุณไม่สามารถเข้าถึงบริการหรือข้อมูลที่เกี่ยวข้องได้อีก. กรุณาทราบถึงการดำเนินการนี้.",
+            icon: "warning",
+            closeButtonHtml: "ตกลง",
+            denyButtonText: "ลบข้อมูล",
+            showDenyButton: true ,
+            showCancelButton : true ,
+            showConfirmButton:false ,
+        }).then((result) => {
+            if (result.isDenied) {
+                this.state.selectBox.map((element: boolean, i) => {
+                    if (element) {
+                        if(this.state.data[i].member !== "super_admin")
+                        {
+                            this.DeleteUser(this.state.data[i].user);
+                        }else
+                        {
+                            Swal.fire({
+                                title: "พบข้อผิดพลาด",
+                                text: "ไม่สามารถลบสมาชิก super admin ได้",
+                                icon: "error",
+                                confirmButtonText: "ตกลง",
+                                showConfirmButton:false , 
+                                showCancelButton:true , 
+                                cancelButtonText:"ปิด"
+                            })
+                                 
+                        }
+                      
+                    } 
+                })
+            }
+        });
+    }
+    private handleCheckboxChange: (index: number) => Promise<void> = async (index) => {
         const newArray: boolean[] = this.state.selectBox.map((element: boolean, i) => {
             if (index === i) {
-                console.log("asd");
+
                 if (element) {
                     element = false;
                     return element
@@ -92,9 +182,17 @@ export class MemberList extends Component<{}, MyState> {
                 return element;
             }
         })
-        this.setState({ selectBox: newArray })
+
+        await this.setState({ selectBox: newArray })
+        const allAreTrue = this.state.selectBox.some(item => item === true)
+        if (allAreTrue) {
+            this.setState({ deleteUser: true });
+        } else {
+
+            this.setState({ deleteUser: false });
+        }
     };
-    private handleSelectAll: () => void = () => {
+    private handleSelectAll: () => Promise<void> = async () => {
         const newArray: boolean[] = this.state.selectBox.map((element: boolean) => {
             if (this.state.selectBoxAll) {
                 element = false;
@@ -104,13 +202,21 @@ export class MemberList extends Component<{}, MyState> {
                 return element
             }
         });
-        this.setState({ selectBox: newArray })
-        if (this.state.selectBoxAll) {
-            this.setState({ selectBoxAll: false })
-        } else {
-            this.setState({ selectBoxAll: true })
-        }
+        await this.setState({ selectBox: newArray })
+        console.log(this.state.selectBox);
 
+        if (this.state.selectBoxAll) {
+            this.setState({ selectBoxAll: false, deleteUser: false })
+        } else {
+            this.setState({ selectBoxAll: true, deleteUser: true })
+        }
+        const allAreTrue = this.state.selectBox.some(item => item === true)
+        if (allAreTrue) {
+            this.setState({ deleteUser: true });
+        } else {
+
+            this.setState({ deleteUser: false });
+        }
     };
 
 
@@ -133,20 +239,23 @@ export class MemberList extends Component<{}, MyState> {
             await this.getDataUserAll(0, this.state.rows - 1)
         }
     }
-    private setNextState:(newState:number)=>void=(newState)=>
-    {
-        this.setState({nextState:newState});
+    private setNextState: (newState: number) => void = (newState) => {
+        this.setState({ nextState: newState });
+        if (newState === 0) {
+            this.getDataUserAll(0, 9);
+        }
     }
-    private setMemberData:(user:string, userName:string , role:string, department:string , section:string , tel:number , img:string,member:string,gender:string)=>void=(user,userName,role,department,section,tel,img,member,gender)=>
-    {
-        this.setState({memberData:{user,userName,tel,role,department,section,gender,img,member}});
+    private setMemberData: (user: string, userName: string, role: string, department: string, section: string, tel: number, img: string, member: string, gender: string) => void = (user, userName, role, department, section, tel, img, member, gender) => {
+        this.setState({ memberData: { user, userName, tel, role, department, section, gender, img, member } });
     }
+
     render(): ReactNode {
         return (
             <div className="ms-72 p-6">
                 {
                     (this.state.nextState === 0) ?
                         (<>
+
                             <h2 className="text-xl font-light">จัดการสมาชิก</h2>
                             <Breadcrumb className="mt-2 " aria-label="Default breadcrumb example ">
                                 <Breadcrumb.Item  >
@@ -158,6 +267,7 @@ export class MemberList extends Component<{}, MyState> {
                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
                                 <div className="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-white dark:bg-gray-900">
                                     <div>
+
                                         <Select onChange={(e) => { this.setRows(e) }} className='my-1  text-indigo-950 ' id="countries" required>
                                             <option value={10} selected>แสดง 10 แถว</option>
                                             <option value={20}>แสดง 20 แถว</option>
@@ -166,7 +276,18 @@ export class MemberList extends Component<{}, MyState> {
                                         </Select>
                                     </div>
                                     <div className="relative">
-                                        <Button >เพิ่มสมาชิก</Button>
+                                        <Button.Group>
+
+                                            {
+                                                (this.state.deleteUser) ?
+                                                    (<Button onClick={()=>{this.OnDeleteUser()}} className="bg-red-500">ลบสมาชิก</Button>
+                                                    )
+                                                    :
+                                                    (<Button disabled className="bg-red-500">ลบสมาชิก</Button>)
+                                            }
+                                            <Button onClick={()=>{  this.setNextState(2)}}>เพิ่มสมาชิก</Button>
+
+                                        </Button.Group>
                                     </div>
                                 </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -227,9 +348,10 @@ export class MemberList extends Component<{}, MyState> {
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <button onClick={()=>{
-                                                            this.setMemberData(element.user,element.userName,element.role,element.department,element.section,element.tel,element.img,element.member,element.gender);
-                                                            this.setNextState(1)}} type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">แก้ไข</button>
+                                                        <button onClick={() => {
+                                                            this.setMemberData(element.user, element.userName, element.role, element.department, element.section, element.tel, element.img, element.member, element.gender);
+                                                            this.setNextState(1)
+                                                        }} type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">แก้ไข</button>
                                                     </td>
                                                 </tr>
                                             ))
@@ -242,8 +364,10 @@ export class MemberList extends Component<{}, MyState> {
                             <div className="flex overflow-x-auto sm:justify-end mt-3">
                                 <Pagination currentPage={this.state.currentPage} totalPages={100} onPageChange={(number) => { this.setCurrentPage(number) }} showIcons />
                             </div>
-                        </>):
-                        ( <MemberFormUpdate data={this.state.memberData} undo={this.setNextState}/>)
+                        </>) :
+                        ((this.state.nextState === 1 )?
+                        (<MemberFormUpdate data={this.state.memberData} undo={this.setNextState} />):
+                        (<Addmember undo={this.setNextState} />))
                 }
 
             </div>

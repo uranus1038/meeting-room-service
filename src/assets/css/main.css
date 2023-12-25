@@ -29,4 +29,17 @@ font-size: 13px;
  
 }
 /* ------------------------------------------ */
-/* input time */
+/* animation popup */
+.animationInfoUser
+{
+  animation: moveUp 1s ease-in-out ;
+}
+@keyframes moveUp {
+  0% {
+    transform: translateY(18px);
+  }
+  
+  100% {
+    transform: translateY(0);
+  }
+}
