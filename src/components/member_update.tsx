@@ -4,8 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 //cofig key
 import { keyName } from '../../config-web.json'
-//css
-import '../assets/css/main.css';
+
 //components
 import { FaInfo } from 'react-icons/fa';
 import { Alert } from 'flowbite-react';
@@ -63,7 +62,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                     role: this.state.currentPosition,
                     section: this.state.currentSection,
                     member: this.state.currentRole,
-                }, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
+                }, { headers: { 'Authorization': `Bearer ${token}` } }).then((response:any) => {
                     if (response.status === 200) {
                         this.props.undo(0);
                         const Toast = Swal.mixin({
@@ -124,7 +123,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
     private fecthRole: () => void = async () => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.get(`http://localhost:8000/api/user/role/`,{ headers: { 'Authorization': `Bearer ${token}` }}).then((response) => {
+            await axios.get(`http://localhost:8000/api/user/role/`,{ headers: { 'Authorization': `Bearer ${token}` }}).then((response:any) => {
                 if (response.status === 200) {
     
                     const newArray: { name: string }[] = response.data.role.map((obj: { name: string }[]) => {
@@ -167,7 +166,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
     }
 
     private fecthDepartment: () => void = async () => {
-        await axios.get(`http://localhost:8000/api/user/department/`).then((response) => {
+        await axios.get(`http://localhost:8000/api/user/department/`).then((response:any) => {
             if (response.status === 200) {
 
                 const newArray: position[] = response.data.department.map((obj: position) => {
@@ -207,7 +206,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
         })
     }
     private fecthPosition: () => void = async () => {
-        await axios.get(`http://localhost:8000/api/user/position/`).then((response) => {
+        await axios.get(`http://localhost:8000/api/user/position/`).then((response:any) => {
             if (response.status === 200) {
 
                 const newArray: position[] = response.data.position.map((obj: position) => {
@@ -247,7 +246,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
         })
     }
     private fecthSection: (department: string) => void = async (department) => {
-        await axios.get(`http://localhost:8000/api/user/section/${department}`).then((response) => {
+        await axios.get(`http://localhost:8000/api/user/section/${department}`).then((response:any) => {
             if (response.status === 200) {
 
                 const newArray: position[] = response.data.section.map((obj: position) => {
@@ -410,7 +409,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                             <option value={this.state.currentDepartment} selected>
                                 {this.state.currentDepartment}
                             </option>
-                            {this.state.department.map((e, i) => (
+                            {this.state.department.map((e:position, i:number) => (
                                 <option key={i} value={e.department}>
                                     {e.department}
                                 </option>
@@ -419,7 +418,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                         <select onChange={(e) => { this.setCurrentSection(e) }}
                             id="section" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300  hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
                             <option value={this.state.currentSection} selected>{this.state.currentSection}</option>
-                            {this.state.section.map((e, i) => (
+                            {this.state.section.map((e:position, i) => (
                                 <option key={i} value={e.section}>
                                     {e.section}
                                 </option>
@@ -428,7 +427,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                         <select onChange={(e) => { this.setCurrentPosition(e) }}
                             id="role" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
                             <option value={this.state.currentPosition} selected>{this.state.currentPosition}</option>
-                            {this.state.position.map((e, i) => (
+                            {this.state.position.map((e:position, i:number) => (
                                 <option key={i} value={e.role}>
                                     {e.role}
                                 </option>
@@ -447,7 +446,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                         {
                             (this.props.data.member === "super_admin") ?
                                 null
-                                : ((this.state.role.map((e, i) => (
+                                : ((this.state.role.map((e:{name:string}, i:number) => (
                                     (e.name !== "super_admin") ?
                                         (<option key={i} value={e.name}>
                                             {e.name}

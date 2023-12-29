@@ -60,7 +60,7 @@ export class Booking extends Component<MyProps, MyState>
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            }).then(response=>{
+            }).then((response:any)=>{
                 if(response.status === 200)
                 {
                     this.props.getDataBooking();

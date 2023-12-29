@@ -62,7 +62,7 @@ class Addmember extends Component<MyProps, MyState> {
             department: this.state.currentDepartment,
             section: this.state.currentSection,
             role: this.state.currentPosition
-        }).then((response) => {
+        }).then((response:any) => {
             if (response.status === 200) {
                 this.props.undo(0);
                 const Toast = Swal.mixin({
@@ -90,7 +90,7 @@ class Addmember extends Component<MyProps, MyState> {
     }
 
     private fecthDepartment: () => void = async () => {
-        await axios.get(`http://localhost:8000/api/user/department/`,).then((response) => {
+        await axios.get(`http://localhost:8000/api/user/department/`,).then((response:any) => {
             if (response.status === 200) {
 
                 const newArray: position[] = response.data.department.map((obj: position) => {
@@ -125,7 +125,7 @@ class Addmember extends Component<MyProps, MyState> {
         })
     }
     private fecthPosition: () => void = async () => {
-        await axios.get(`http://localhost:8000/api/user/position/`).then((response) => {
+        await axios.get(`http://localhost:8000/api/user/position/`).then((response:any) => {
             if (response.status === 200) {
 
                 const newArray: position[] = response.data.position.map((obj: position) => {
@@ -160,7 +160,7 @@ class Addmember extends Component<MyProps, MyState> {
         })
     }
     private fecthSection: (department: string) => void = async (department) => {
-        await axios.get(`http://localhost:8000/api/user/section/${department}`).then((response) => {
+        await axios.get(`http://localhost:8000/api/user/section/${department}`).then((response:any) => {
             if (response.status === 200) {
 
                 const newArray: position[] = response.data.section.map((obj: position) => {
@@ -273,7 +273,7 @@ class Addmember extends Component<MyProps, MyState> {
                         <div className="flex">
                             <select onChange={this.setDepartment} id="department" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
                                 <option value={this.state.currentDepartment} selected>{this.state.currentDepartment}</option>
-                                {this.state.department.map((e, i) => (
+                                {this.state.department.map((e:position, i:number) => (
                                     <option key={i} value={e.department}>
                                         {e.department}
                                     </option>
@@ -282,7 +282,7 @@ class Addmember extends Component<MyProps, MyState> {
                             </select>
                             <select onChange={this.setSection} id="section" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300  hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
                                 <option value={this.state.currentSection} selected>{this.state.currentSection}</option>
-                                {this.state.section.map((e, i) => (
+                                {this.state.section.map((e:position, i:number) => (
                                     <option key={i} value={e.section}>
                                         {e.section}
                                     </option>
@@ -292,7 +292,7 @@ class Addmember extends Component<MyProps, MyState> {
                             <select onChange={this.setPostion} id="positon" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
                                 <option value={this.state.currentPosition} selected>{this.state.currentPosition}</option>
 
-                                {this.state.position.map((e, i) => (
+                                {this.state.position.map((e:position, i:number) => (
                                     <option key={i} value={e.role}>
                                         {e.role}
                                     </option>

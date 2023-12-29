@@ -3,16 +3,19 @@ import { Component, ReactNode } from "react";
 'use client';
 import { Card, Rating, Avatar, Button, Select, Breadcrumb, Pagination } from 'flowbite-react';
 interface MyState {
-    currentPage: number
+    currentPage: number ;
+
+
 }
 export class MeetimgListComponent extends Component<{}, MyState> {
     constructor(props: {}) {
         super(props)
-        this.state = { currentPage: 1 }
+        this.state = { currentPage: 1  }
     }
     private setCurrentPage(page: number): void {
         this.setState({ currentPage: page })
     }
+    
     render(): ReactNode {
         return (
             <div className="ms-72 p-6 ">

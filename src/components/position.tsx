@@ -24,7 +24,7 @@ export class PositionComponent extends Component<{}, MyState> {
     private getPositionAll: (rows_a: number, rows_b: number) => void = async (rows_a, rows_b) => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.get(`http://localhost:8000/api/admin/get-position/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
+            await axios.get(`http://localhost:8000/api/admin/get-position/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response:any) => {
                 if (response.status === 200) {
           
                         const newArray: position[] = response.data.position.map((obj: position) => {

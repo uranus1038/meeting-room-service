@@ -52,7 +52,7 @@ export class SidebarLeftAdmin extends Component<MyProps, MyState> {
 
                             <button className='w-full text-start '
                                 onClick={() => { this.props.newLink(2) }}>
-                                <Sidebar.Item href="#"><i className="fa-solid fa-address-book me-2"></i><span className="text-sm">บทบาทและหน้าที่  </span></Sidebar.Item>
+                                <Sidebar.Item ><i className="fa-solid fa-address-book me-2"></i><span className="text-sm">บทบาทและหน้าที่  </span></Sidebar.Item>
                             </button>
 
                             <SidebarCollapse

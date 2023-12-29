@@ -12,15 +12,15 @@ import CreationForm from "./creation";
 import Addmember from "./AddUser";
 
 interface MyState {
-    currentPage: number
+    currentPage: number;
     rows: number;
-    data: user[]
-    memberData: user
-    selectedRows: boolean[]
-    selectBox: boolean[]
-    selectBoxAll: boolean
-    nextState: number
-    deleteUser: boolean
+    data: user[];
+    memberData: user;
+    selectedRows: boolean[];
+    selectBox: boolean[];
+    selectBoxAll: boolean;
+    nextState: number;
+    deleteUser: boolean;
 }
 export class MemberList extends Component<{}, MyState> {
     constructor(props: {}) {
@@ -38,7 +38,7 @@ export class MemberList extends Component<{}, MyState> {
         this.setState({ selectBox: [] });
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.get(`http://localhost:8000/api/admin/get-user/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
+            await axios.get(`http://localhost:8000/api/admin/get-user/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response:any) => {
                 if (response.status === 200) {
                     const newArray: user[] = response.data.accouts.map((obj: user) => {
                         if (this.state.selectBox.length < response.data.accouts.length) {
@@ -85,7 +85,7 @@ export class MemberList extends Component<{}, MyState> {
         this.setState({ selectBox: [] });
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.get(`http://localhost:8000/api/admin/delete-member/${user}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
+            await axios.get(`http://localhost:8000/api/admin/delete-member/${user}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response:any) => {
                 if (response.status === 204) {
                     this.getDataUserAll(0, 9);
                     const Toast = Swal.mixin({
@@ -192,6 +192,7 @@ export class MemberList extends Component<{}, MyState> {
             this.setState({ deleteUser: false });
         }
     };
+    
     private handleSelectAll: () => Promise<void> = async () => {
         const newArray: boolean[] = this.state.selectBox.map((element: boolean) => {
             if (this.state.selectBoxAll) {
