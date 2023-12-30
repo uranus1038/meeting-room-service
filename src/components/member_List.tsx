@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 //cofig key
 import { keyName } from '../../config-web.json'
 // components
-import { Avatar, Button, Select, Breadcrumb, Pagination } from 'flowbite-react';
+import { Avatar, Button, Select, Breadcrumb, Pagination, Alert } from 'flowbite-react';
 // interface
 import { user } from "../interface/accout";
 import { MemberFormUpdate } from "./member_update";
@@ -21,12 +21,13 @@ interface MyState {
     selectBoxAll: boolean;
     nextState: number;
     deleteUser: boolean;
+    result: boolean;
 }
 export class MemberList extends Component<{}, MyState> {
     constructor(props: {}) {
         super(props)
         this.state = {
-            deleteUser: false,
+            deleteUser: false, result: false,
             memberData: { user: "", userName: "", role: "", tel: 0, department: "", section: "", gender: "", img: "", member: "" },
             nextState: 0, rows: 10, currentPage: 1, data: [], selectedRows: [], selectBox: [], selectBoxAll: false
         }
@@ -38,46 +39,46 @@ export class MemberList extends Component<{}, MyState> {
         this.setState({ selectBox: [] });
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.get(`http://localhost:8000/api/admin/get-user/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response:any) => {
-                if (response.status === 200) {
-                    const newArray: user[] = response.data.accouts.map((obj: user) => {
-                        if (this.state.selectBox.length < response.data.accouts.length) {
-                            this.state.selectBox.push(false)
-                        }
-                        return {
-                            ...obj
-                        }
-                    }
-                    );
-                    this.setState({ data: newArray });
-
-                } else {
-                }
-
-            }).catch((error) => {
-                if (error.response.status === 403) {
-                    localStorage.removeItem(keyName);
-                    window.location.href = window.location.hostname;
-                    console.log("403 ไม่สามารถเข้าถึงข้อมูลได้");
-
-                } else if (error.response.status === 404) {
-                    this.setState({ data: [] });
-                } else {
-                    if (error.response.status === 401) {
-                        Swal.fire({
-                            title: "เซสชั่นหมดอายุ",
-                            text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณเราจึงต้องมีมาตราการในการรักษาความปลอดภัยนี้",
-                            icon: "warning",
-                            confirmButtonText: "ตกลง",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = window.location.hostname
+            await axios.get(`http://localhost:8000/api/admin/get-user/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } })
+                .then((response: any) => {
+                    if (response.status === 200) {
+                        const newArray: user[] = response.data.accouts.map((obj: user) => {
+                            if (this.state.selectBox.length < response.data.accouts.length) {
+                                this.state.selectBox.push(false)
                             }
-                        });
+                            return {
+                                ...obj
+                            }
+                        }
+                        );
+                        this.setState({ data: newArray });
+                        this.setState({ result: false });
                     }
-                }
+                }).catch((error) => {
+                    if (error.response.status === 403) {
+                        localStorage.removeItem(keyName);
+                        window.location.href = window.location.hostname;
+                        console.log("403 ไม่สามารถเข้าถึงข้อมูลได้");
 
-            })
+                    } else if (error.response.status === 404) {
+                        this.setState({ data: [] });
+                        this.setState({ result: true });
+                    } else {
+                        if (error.response.status === 401) {
+                            Swal.fire({
+                                title: "เซสชั่นหมดอายุ",
+                                text: "เซลชั่นของคุณหมดอายุการใช้งานแล้วเพื่อรักษาข้อมูลการใช้งานของคุณเราจึงต้องมีมาตราการในการรักษาความปลอดภัยนี้",
+                                icon: "warning",
+                                confirmButtonText: "ตกลง",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = window.location.hostname
+                                }
+                            });
+                        }
+                    }
+
+                })
         }
 
     }
@@ -85,7 +86,7 @@ export class MemberList extends Component<{}, MyState> {
         this.setState({ selectBox: [] });
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.get(`http://localhost:8000/api/admin/delete-member/${user}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response:any) => {
+            await axios.get(`http://localhost:8000/api/admin/delete-member/${user}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response: any) => {
                 if (response.status === 204) {
                     this.getDataUserAll(0, 9);
                     const Toast = Swal.mixin({
@@ -131,38 +132,36 @@ export class MemberList extends Component<{}, MyState> {
         }
 
     }
-    private OnDeleteUser:()=>Promise<void>=async()=>{
+    private OnDeleteUser: () => Promise<void> = async () => {
         Swal.fire({
             title: "คำเตือน",
             text: "การลบสมาชิกจะทำให้คุณไม่สามารถเข้าถึงบริการหรือข้อมูลที่เกี่ยวข้องได้อีก. กรุณาทราบถึงการดำเนินการนี้.",
             icon: "warning",
-            closeButtonHtml: "ตกลง",
+            cancelButtonText: "ยกเลิก",
             denyButtonText: "ลบข้อมูล",
-            showDenyButton: true ,
-            showCancelButton : true ,
-            showConfirmButton:false ,
+            showDenyButton: true,
+            showCancelButton: true,
+            showConfirmButton: false,
         }).then((result) => {
             if (result.isDenied) {
                 this.state.selectBox.map((element: boolean, i) => {
                     if (element) {
-                        if(this.state.data[i].member !== "super_admin")
-                        {
+                        if (this.state.data[i].member !== "super_admin") {
                             this.DeleteUser(this.state.data[i].user);
-                        }else
-                        {
+                        } else {
                             Swal.fire({
                                 title: "พบข้อผิดพลาด",
                                 text: "ไม่สามารถลบสมาชิก super admin ได้",
                                 icon: "error",
                                 confirmButtonText: "ตกลง",
-                                showConfirmButton:false , 
-                                showCancelButton:true , 
-                                cancelButtonText:"ปิด"
+                                showConfirmButton: false,
+                                showCancelButton: true,
+                                cancelButtonText: "ปิด"
                             })
-                                 
+
                         }
-                      
-                    } 
+
+                    }
                 })
             }
         });
@@ -192,7 +191,7 @@ export class MemberList extends Component<{}, MyState> {
             this.setState({ deleteUser: false });
         }
     };
-    
+
     private handleSelectAll: () => Promise<void> = async () => {
         const newArray: boolean[] = this.state.selectBox.map((element: boolean) => {
             if (this.state.selectBoxAll) {
@@ -281,12 +280,12 @@ export class MemberList extends Component<{}, MyState> {
 
                                             {
                                                 (this.state.deleteUser) ?
-                                                    (<Button onClick={()=>{this.OnDeleteUser()}} className="bg-red-500">ลบสมาชิก</Button>
+                                                    (<Button onClick={() => { this.OnDeleteUser() }} className="bg-red-500">ลบสมาชิก</Button>
                                                     )
                                                     :
                                                     (<Button disabled className="bg-red-500">ลบสมาชิก</Button>)
                                             }
-                                            <Button onClick={()=>{  this.setNextState(2)}}>เพิ่มสมาชิก</Button>
+                                            <Button onClick={() => { this.setNextState(2) }}>เพิ่มสมาชิก</Button>
 
                                         </Button.Group>
                                     </div>
@@ -359,16 +358,24 @@ export class MemberList extends Component<{}, MyState> {
                                         }
 
                                     </tbody>
+
                                 </table>
+                                {(this.state.result) ?
+                                    (<Alert className="w-full" color="warning" >
+                                        <span>
+                                            ไม่พบข้อมูล
+                                        </span>
+                                    </Alert>) : null}
+
 
                             </div>
                             <div className="flex overflow-x-auto sm:justify-end mt-3">
                                 <Pagination currentPage={this.state.currentPage} totalPages={100} onPageChange={(number) => { this.setCurrentPage(number) }} showIcons />
                             </div>
                         </>) :
-                        ((this.state.nextState === 1 )?
-                        (<MemberFormUpdate data={this.state.memberData} undo={this.setNextState} />):
-                        (<Addmember undo={this.setNextState} />))
+                        ((this.state.nextState === 1) ?
+                            (<MemberFormUpdate data={this.state.memberData} undo={this.setNextState} />) :
+                            (<Addmember undo={this.setNextState} />))
                 }
 
             </div>

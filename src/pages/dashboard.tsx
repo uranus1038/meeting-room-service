@@ -9,7 +9,7 @@ import { SidebarLeftAdmin } from '../components/sidebar_left_admin';
 import { SidebarLeftMember } from '../components/sidebar_left_member';
 import { DashboardComponent } from '../components/dashboard';
 import { Navbar2 } from '../components/navbar2';
-import { MemberList } from '../components/member_List';
+import { MemberList } from '../components/member_list';
 import { RoleLsit } from '../components/role_list';
 import { DepartmentComponent } from '../components/department';
 import { SectionComponent } from '../components/section';

@@ -351,7 +351,6 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                                 } else {
                                     this.setAnimationAlert(0)
                                 }
-
     }
     render(): ReactNode {
         return (
@@ -455,9 +454,8 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                                 ))))
                         }
                     </Select>
-                    <Alert id="alertInfo" className="animationInfoUser hidden" additionalContent={
+                    <Alert id="alertInfo" className="animationInfoUser w-full hidden sticky bottom-6" additionalContent={
                         <>
-
                             <div className="flex justify-between items-center">
                                 <div className="mb-4 mt-2 text-sm text-cyan-700 dark:text-cyan-800">
                                     <FaInfo className="me-3 inline-flex" /> ข้อมูลมีการเปลี่ยนแปลง คุณต้องการแก้ไขหรือไม่ ?
