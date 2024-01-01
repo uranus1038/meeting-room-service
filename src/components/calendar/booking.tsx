@@ -4,15 +4,15 @@ import { FaChair, FaPen, FaCheck } from 'react-icons/fa';
 import { SiGoogleclassroom } from "react-icons/si";
 import Swal from 'sweetalert2';
 //key
-import { keyName } from '../../config-web.json';
+import { keyName } from '../../../config-web.json';
 //components
 'use client';
 
 import { HiInformationCircle } from 'react-icons/hi';
 import { Modal, Alert, Button, TextInput, Datepicker, ToggleSwitch } from 'flowbite-react';
 //interface
-import { user } from "../interface/accout";
-import { eventFC } from "../interface/calendarEvent";
+import { user } from "../../interface/accout";
+import { eventFC } from "../../interface/calendarEvent";
 interface MyState {
     day: string
     switch1: boolean

@@ -9,7 +9,7 @@ import {
 import { twMerge } from 'tailwind-merge';
 import { Link } from 'react-router-dom';
 //interface user
-import { user } from '../interface/accout';
+import { user } from '../../interface/accout';
 interface MyProps {
     dataUser: user
     setDataUser(data: user): void;

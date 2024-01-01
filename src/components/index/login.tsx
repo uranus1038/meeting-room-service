@@ -4,9 +4,9 @@ import Swal from 'sweetalert2';
 //component 
 import { Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
 // key name
-import { keyName } from '../../config-web.json'
+import { keyName } from '../../../config-web.json'
 //interface
-import { user } from '../interface/accout';
+import { user } from '../../interface/accout';
 /// props interface
 interface MyProps {
     OnFormUser(newState: boolean, newState2: boolean): void;

@@ -1,11 +1,11 @@
 import { Component, ReactNode } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Navigate } from "react-router-dom";
-import Banner from '../components/banner';
+import Banner from '../components/index/banner';
 // components
-import LoginForm from '../components/login';
-import { NavbarMain } from '../components/navbar';
-import CreationForm from '../components/creation';
+import LoginForm from '../components/index/login';
+import { NavbarMain } from '../components/navbar/navbar';
+import CreationForm from '../components/index/creation';
 //interface
 import {user} from '../interface/accout';
 //state

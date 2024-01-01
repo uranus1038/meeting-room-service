@@ -2,12 +2,12 @@ import { Component, ReactNode, ChangeEvent } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 //cofig key
-import { keyName } from '../../config-web.json'
+import { keyName } from '../../../config-web.json'
 // components
 'use client';
 import { Avatar, Button, Select, Breadcrumb, Pagination } from 'flowbite-react';
 //interface 
-import { position } from "../interface/position";
+import { position } from "../../interface/position";
 interface MyState {
     currentPage: number
     rows: number;

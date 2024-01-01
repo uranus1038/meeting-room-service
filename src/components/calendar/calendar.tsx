@@ -12,11 +12,11 @@ import listPlugin from '@fullcalendar/list';
 import { Button, Select } from 'flowbite-react';
 import { Booking } from './booking';
 //css
-import '../assets/css/main.css'
+import '../../assets/css/main.css'
 // interface
-import { user } from '../interface/accout';
-import { reserve } from '../interface/reserve';
-import { eventFC } from '../interface/calendarEvent';
+import { user } from '../../interface/accout';
+import { reserve } from '../../interface/reserve';
+import { eventFC } from '../../interface/calendarEvent';
 // props interface 
 interface MyProps {
     OnFormUser: (newState: boolean, newState2: boolean) => void;

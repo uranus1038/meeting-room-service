@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 //components 
 import { Avatar, Dropdown } from 'flowbite-react';
 //key
-import { keyName } from '../../config-web.json';
+import { keyName } from '../../../config-web.json';
 //interface
-import { user } from '../interface/accout';
+import { user } from '../../interface/accout';
 //img
 import fallbackImage from '../assets/img/user.png';
 import type { ModalOptions, ModalInterface } from 'flowbite'

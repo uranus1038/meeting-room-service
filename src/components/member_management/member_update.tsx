@@ -3,14 +3,14 @@ import { Component, ReactNode, ChangeEvent } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 //cofig key
-import { keyName } from '../../config-web.json'
+import { keyName } from '../../../config-web.json'
 
 //components
 import { FaInfo } from 'react-icons/fa';
 import { Alert } from 'flowbite-react';
 //interface
-import { user } from "../interface/accout";
-import { position } from "../interface/position";
+import { user } from "../../interface/accout";
+import { position } from "../../interface/position";
 interface MyProps {
     data: user;
     undo: (newState: number) => void;
@@ -366,12 +366,7 @@ export class MemberFormUpdate extends Component<MyProps, MyState> {
                 <div className="flex items-center justify-end flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-white dark:bg-gray-900">
 
                     <div className="relative">
-                        <Button.Group>
-                            <Button onClick={() => { this.props.undo(0) }}>ลบ</Button>
-
                             <Button onClick={() => { this.props.undo(0) }}>ย้อนกลับ</Button>
-
-                        </Button.Group>
                     </div>
                 </div>
                 <form className="space-y-4" action="#">

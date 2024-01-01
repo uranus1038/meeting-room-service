@@ -1,8 +1,8 @@
 import { Component, ReactNode } from 'react';
 //components
-import Calendar from './calendar';
+import Calendar from '../calendar/calendar';
 //interface
-import { user } from '../interface/accout';
+import { user } from '../../interface/accout';
 // props interface 
 interface MyProps {
     OnFormUser(newState: boolean, newState2: boolean): void;

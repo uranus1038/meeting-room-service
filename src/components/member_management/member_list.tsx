@@ -2,13 +2,13 @@ import { Component, ReactNode, ChangeEvent } from "react";
 import axios from 'axios';
 import Swal from 'sweetalert2'
 //cofig key
-import { keyName } from '../../config-web.json'
+import { keyName } from '../../../config-web.json'
 // components
 import { Avatar, Button, Select, Breadcrumb, Pagination, Alert } from 'flowbite-react';
 // interface
-import { user } from "../interface/accout";
+import { user } from "../../interface/accout";
 import { MemberFormUpdate } from "./member_update";
-import CreationForm from "./creation";
+import CreationForm from "../index/creation";
 import Addmember from "./AddUser";
 
 interface MyState {

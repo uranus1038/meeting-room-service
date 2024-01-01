@@ -1,24 +1,23 @@
 import { Component, ReactNode } from 'react';
 import axios from 'axios';
-import Banner from '../components/banner';
 //import interface
 import { user } from '../interface/accout';
 // components
-import Calendar from '../components/calendar';
-import { SidebarLeftAdmin } from '../components/sidebar_left_admin';
-import { SidebarLeftMember } from '../components/sidebar_left_member';
-import { DashboardComponent } from '../components/dashboard';
-import { Navbar2 } from '../components/navbar2';
-import { MemberList } from '../components/member_list';
-import { RoleLsit } from '../components/role_list';
-import { DepartmentComponent } from '../components/department';
-import { SectionComponent } from '../components/section';
-import { PositionComponent } from '../components/position';
-import { ApproveComponent } from '../components/approve_list';
-import { BookingComponent } from '../components/booking_list';
-import { MeetimgListComponent } from '../components/meetingroom_list';
-import { ToolComponent } from '../components/tools';
-import { ServiceComponent } from '../components/services';
+import Calendar from '../components/calendar/calendar';
+import { SidebarLeftAdmin } from '../components/dashboard/sidebar_left_admin';
+import { SidebarLeftMember } from '../components/dashboard/sidebar_left_member';
+import { DashboardComponent } from '../components/dashboard/dashboard';
+import { Navbar2 } from '../components/navbar/navbar2';
+import { MemberList } from '../components/member_management/member_list';
+import { RoleLsit } from '../components/role/role_list';
+import { DepartmentComponent } from '../components/user/department';
+import { SectionComponent } from '../components/user/section';
+import { PositionComponent } from '../components/user/position';
+import { ApproveComponent } from '../components/meeting_room/approve_list';
+import { BookingComponent } from '../components/meeting_room/booking_list';
+import { MeetimgListComponent } from '../components//meeting_room/meetingroom_list';
+import { ToolComponent } from '../components/services/tools';
+import { ServiceComponent } from '../components/services/services';
 interface MyProps {
   dataUser: user
   setDataUser(data: user): void;

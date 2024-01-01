@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 //components
 
 //interface
-import { position } from '../interface/position';
+import { position } from '../../interface/position';
 import { Breadcrumb, Button } from 'flowbite-react';
 // props interface
 interface MyProps {

@@ -1,14 +1,14 @@
 import { Component, ReactNode } from 'react';
 import { BrowserRouter as Navigate } from "react-router-dom";
 //key //key
-import { keyName } from '../../config-web.json';
+import { keyName } from '../../../config-web.json';
 //interface
-import { user } from '../interface/accout';
+import { user } from '../../interface/accout';
 //component
 'use client';
-import { UserInfo } from './user_info';
+import { UserInfo } from '../index/user_info';
 import { Button, Navbar,Badge} from 'flowbite-react';
-import { Alert } from './alert';
+import { Alert } from '../index/alert';
 // props interface
 interface MyProps {
     OnFormUser(newState: boolean, newState2: boolean): void;
