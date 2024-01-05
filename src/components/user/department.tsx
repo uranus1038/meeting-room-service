@@ -7,18 +7,22 @@ import { keyName } from '../../../config-web.json'
 'use client';
 import { Avatar, Button, Select, Breadcrumb, Pagination } from 'flowbite-react';
 import { AddDepartment } from "./department_add";
+import { UpdateDepartment } from "./department_update";
 //interface 
 import { position } from "../../interface/position";
 interface MyState {
     currentPage: number
     rows: number;
-    department: position[]
+    department: position[];
+    code: string;
+    department_prop: string;
+    note: string
     nextState: number;
 }
 export class DepartmentComponent extends Component<{}, MyState> {
     constructor(props: {}) {
         super(props)
-        this.state = { currentPage: 1, department: [], rows: 10, nextState: 0 }
+        this.state = { currentPage: 1, department: [], code: "", department_prop: "", note: "", rows: 10, nextState: 0 }
     }
     componentDidMount() {
         this.getDepartmentAll(0, 9);
@@ -96,9 +100,11 @@ export class DepartmentComponent extends Component<{}, MyState> {
             await this.getDepartmentAll(0, this.state.rows - 1)
         }
     }
-    private setNextState:(newState:number)=> void =(newState) =>
-    {
-        this.setState({nextState:newState});
+    private setNextState: (newState: number) => void = (newState) => {
+        this.setState({ nextState: newState });
+    }
+    private setDataDepartment: (code: string, department_prop: string, note: string) => void = (code, department_prop, note) => {
+        this.setState({ code, department_prop, note });
     }
     render(): ReactNode {
         return (
@@ -125,7 +131,7 @@ export class DepartmentComponent extends Component<{}, MyState> {
                                         </Select>
                                     </div>
                                     <div className="relative">
-                                        <Button onClick={()=>{this.setNextState(1)}}>เพิ่มฝ่าย</Button>
+                                        <Button onClick={() => { this.setNextState(1) }}>เพิ่มฝ่าย</Button>
                                     </div>
                                 </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -179,7 +185,12 @@ export class DepartmentComponent extends Component<{}, MyState> {
                                                         {element.note}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">ลบ</a>
+                                                        <button
+                                                            onClick={() => {
+                                                                this.setDataDepartment(element.code, element.department, element.note)
+                                                                this.setNextState(2)
+                                                            }}
+                                                            type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">แก้ไข</button>
                                                     </td>
                                                 </tr>
                                             ))
@@ -195,7 +206,10 @@ export class DepartmentComponent extends Component<{}, MyState> {
                             </div>
 
                         </>) :
-                        (<AddDepartment undo={this.setNextState}/>)
+                        (
+                            (this.state.nextState === 1) ? (<AddDepartment getDepartmentAll={this.getDepartmentAll} undo={this.setNextState} />) :
+                                (<UpdateDepartment note={this.state.note} department_prop={this.state.department_prop} code={this.state.code} getDepartmentAll={this.getDepartmentAll} undo={this.setNextState} />)
+                        )
                 }
 
             </div>

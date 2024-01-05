@@ -39,7 +39,6 @@ export class SidebarLeftAdmin extends Component<MyProps, MyState> {
                         </Link>
 
                     </div>
-                    <hr />
                         <Sidebar.ItemGroup>
                             <Sidebar.Item ><span className='text-xs font-medium text-purple-500 font-semibold'>แดชบอร์ด</span></Sidebar.Item>
                             <Link to={"/th/home"}><Sidebar.Item><i className=' fas  fa-home me-2'></i><span className="text-sm">หน้าแรก</span></Sidebar.Item></Link>

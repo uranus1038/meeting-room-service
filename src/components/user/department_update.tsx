@@ -14,43 +14,43 @@ import { position } from "../../interface/position";
 interface MyProps {
     undo: (newState: number) => void;
     getDepartmentAll: (rows_a: number, rows_b: number) => void;
+    code : string  ;
+    department_prop : string ;
+    note : string ;
 }
 interface MyState {
-    code : string ;
-    department : string ; 
-    note : string ;
+    codeCurrent : string ;
+    departmentCurrent : string ; 
+    noteCurrent : string ;
     error: string;
 
 }
-export class AddDepartment extends Component<MyProps, MyState> {
+export class UpdateDepartment extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
         super(props);
         this.state = {
-            code : "" , 
-            department : "" , 
-            note : "" ,
+            codeCurrent :  this.props.code, 
+            departmentCurrent : this.props.department_prop , 
+            noteCurrent : this.props.note ,
             error: "",
         };
     }
-    private OnCreate : ()=> Promise<void> = async ()=>
+    private OnUpdate : ()=> Promise<void> = async ()=>
     {
-        
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
             await axios.post(`http://localhost:8000/api/admin/add-department/`, {
-                code: this.state.code , 
-                department : this.state.department , 
-                note : this.state.note , 
+                code: this.state.codeCurrent , 
+                department : this.state.departmentCurrent , 
+                note : this.state.noteCurrent , 
             },
                 { headers: { 'Authorization': `Bearer ${token}` } }
             ).then((response :any) => {
-                
                 if (response.status === 200) {
                     this.props.undo(0);
                     this.props.getDepartmentAll(0,9);
                     Swal.fire({
-                        title: "เพิ่มฝ่ายใหม่เสร็จสิ้น",
-                        text: "คุณสามารถปรับปรุงหรือสร้างกระบวนการทำงานที่มีประสิทธิภาพในการปฏิบัติงานร่วมกับฝ่ายที่มีอยู่", 
+                        title: "แก้ไขฝ่ายเสร็จสิ้น",
                         icon: "success",
                         confirmButtonText: "ตกลง",
                     })
@@ -96,19 +96,30 @@ export class AddDepartment extends Component<MyProps, MyState> {
         }
     }
     private isAlert(): void {
-
+        if(this.props.code !== this.state.codeCurrent 
+            || this.props.department_prop !== this.state.departmentCurrent 
+            || this.props.note !== this.state.noteCurrent)
+        {
+            this.setAnimationAlert(1);
+        }else
+        {
+            this.setAnimationAlert(0);
+        }
     }
     private setNewCode:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
     {
-        await this.setState({code:event.target.value});
+        await this.setState({codeCurrent:event.target.value});
+        this.isAlert();
     }
     private setNewDepartment:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
     {
-        await this.setState({department:event.target.value});
+        await this.setState({departmentCurrent:event.target.value});
+        this.isAlert();
     }
     private setNewNote:(event:ChangeEvent<HTMLTextAreaElement>) => Promise<void> = async (event) =>
     {
-        await this.setState({note:event.target.value});
+        await this.setState({noteCurrent:event.target.value});
+        this.isAlert();
     }
     render(): ReactNode {
         return (
@@ -134,21 +145,17 @@ export class AddDepartment extends Component<MyProps, MyState> {
 
                     <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รหัสฝ่าย</label>
-                        <input value={this.state.code} onChange={this.setNewCode} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                        <input value={this.state.codeCurrent} onChange={this.setNewCode} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อฝ่าย</label>
-                        <input value={this.state.department} onChange={this.setNewDepartment}  type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                        <input value={this.state.departmentCurrent} onChange={this.setNewDepartment}  type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label htmlFor="note" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเหตุ</label>
-                        <textarea value={this.state.note} onChange={this.setNewNote}  id="note" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
+                        <textarea value={this.state.noteCurrent} onChange={this.setNewNote}  id="note" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
                     </div>
                     <div>
-                        <ButtonGroup>
-                            <Button onClick={() => { this.props.undo(0) }}>ย้อนกลับ</Button>
-                            <Button onClick={() => { this.OnCreate()}}>เพิ่มฝ่าย</Button>
-                        </ButtonGroup>
                     </div>
                     <Alert id="alertInfo" className="animationInfoUser w-full hidden sticky bottom-6" additionalContent={
                         <>

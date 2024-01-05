@@ -13,6 +13,7 @@ interface MyState {
     role: permise[];
     role_backup: permise[];
     name_role: string;
+    edit_role: string;
     nameCurrent: string;
     newRole: string;
     index: number;
@@ -23,7 +24,7 @@ interface MyState {
 export class RoleLsit extends Component<{}, MyState> {
     constructor(props: {}) {
         super(props)
-        this.state = { nameCurrent: "", error: "", newRole: "", isUpdate: false, index: 0, name_role: "", role: [], role_backup: [], openModal: false }
+        this.state = { edit_role: "", nameCurrent: "", error: "", newRole: "", isUpdate: false, index: 0, name_role: "", role: [], role_backup: [], openModal: false }
     }
     componentDidMount() {
         this.getRole();
@@ -31,13 +32,14 @@ export class RoleLsit extends Component<{}, MyState> {
     private updateRole: () => Promise<void> = async () => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            this.setState({ nameCurrent: this.state.name_role });
+            this.setState({ nameCurrent: this.state.edit_role });
             this.state.role.map(async (obj: permise) => {
                 if (obj.name === this.state.name_role) {
                     await axios.post(`http://localhost:8000/api/admin/update-role/`,
                         {
                             role: this.state.name_role,
-                            m_member:obj.m_member,
+                            edit_role: this.state.edit_role,
+                            m_member: obj.m_member,
                             m_role: obj.m_role,
                             m_user: obj.m_user,
                             m_approve: obj.m_approve,
@@ -49,7 +51,6 @@ export class RoleLsit extends Component<{}, MyState> {
                         { headers: { 'Authorization': `Bearer ${token}` } }
                     ).then(async (response) => {
                         if (response.status === 200) {
-                            console.log(response);
                             this.getRole();
                             this.setAnimationAlert(0);
                             document.getElementById("alertErrorTable")?.classList.add("hidden");
@@ -101,10 +102,10 @@ export class RoleLsit extends Component<{}, MyState> {
 
         }
     }
-
     private deleteRole: () => Promise<void> = async () => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
+            this.setState({ nameCurrent: "" });
             await axios.get(`http://localhost:8000/api/admin/delete-role/${this.state.name_role}`, { headers: { 'Authorization': `Bearer ${token}` } }
             ).then((response) => {
                 console.log(response);
@@ -161,6 +162,7 @@ export class RoleLsit extends Component<{}, MyState> {
     private createRole: () => Promise<void> = async () => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
+            this.setState({ nameCurrent: this.state.newRole });
             await axios.post(`http://localhost:8000/api/admin/create-role/`, {
                 name: this.state.newRole
             },
@@ -221,6 +223,7 @@ export class RoleLsit extends Component<{}, MyState> {
                             if (obj.name !== "super_admin" && obj.name !== "member") {
                                 if (!isName) {
                                     this.setState({ name_role: obj.name });
+                                    this.setState({ edit_role: obj.name });
                                     isName = true;
                                 }
                             }
@@ -229,13 +232,11 @@ export class RoleLsit extends Component<{}, MyState> {
                             }
                         }
                         );
-                        if(newArray.length === 2)
-                        {
+                        if (newArray.length === 2) {
                             this.setState({ name_role: "ไม่พบชื่อบทบาท" });
                         }
-                        if(this.state.nameCurrent !== "")
-                        {
-                            this.setState({ name_role:this.state.nameCurrent});
+                        if (this.state.nameCurrent !== "") {
+                            this.setState({ name_role: this.state.nameCurrent });
                         }
                         this.setState({ role: newArray });
                         this.setState({ role_backup: response.data.role });
@@ -272,6 +273,7 @@ export class RoleLsit extends Component<{}, MyState> {
         );
         this.setState({ role: newArray });
         this.setState({ name_role: event.target.value.toString() });
+        this.setState({ edit_role: event.target.value.toString() });
         this.setAnimationAlert(0);
     }
     private handleCheckboxChange: (state: string, index: number) => void = (state, index) => {
@@ -367,7 +369,8 @@ export class RoleLsit extends Component<{}, MyState> {
             || Boolean(this.state.role[i].m_setting) !== Boolean(this.state.role_backup[i].m_setting)
             || Boolean(this.state.role[i].m_user) !== Boolean(this.state.role_backup[i].m_user)
             || Boolean(this.state.role[i].m_role) !== Boolean(this.state.role_backup[i].m_role)
-        ){
+            || this.state.name_role.toString() !== this.state.edit_role.toString()
+        ) {
             this.setAnimationAlert(1);
         } else {
             this.setAnimationAlert(0);
@@ -380,6 +383,18 @@ export class RoleLsit extends Component<{}, MyState> {
     }
     private setNewRole: (newState: ChangeEvent<HTMLInputElement>) => Promise<void> = async (newState) => {
         await this.setState({ newRole: newState.target.value });
+    }
+    private setEditeRole: (newState: ChangeEvent<HTMLInputElement>) => Promise<void> = async (newState) => {
+        await this.setState({ edit_role: newState.target.value });
+        if(this.state.name_role.toString() !== this.state.edit_role.toString())
+        {
+            this.setAnimationAlert(1);
+        }else
+        {
+            this.setAnimationAlert(0);
+            
+        }
+   
     }
     private OnDeletePermise(): void {
         Swal.fire({
@@ -421,6 +436,14 @@ export class RoleLsit extends Component<{}, MyState> {
                                     )
                                 }
                             </Select>
+                            {
+                                (this.state.role.length === 2) ? (null) :
+                                    (<TextInput value={this.state.edit_role}
+                                        onChange={this.setEditeRole}
+                                        className="ms-3 inline-flex" icon={FaEdit} >
+
+                                    </TextInput>)
+                            }
 
                         </div>
                         <div className="relative">

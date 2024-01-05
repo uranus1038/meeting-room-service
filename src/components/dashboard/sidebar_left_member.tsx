@@ -31,7 +31,6 @@ export class SidebarLeftMember extends Component<MyProps, MyState> {
                         </Link>
 
                     </div>
-                    <hr />
                     <Sidebar.Items className='mt-5 '>
                         <Sidebar.ItemGroup>
 
