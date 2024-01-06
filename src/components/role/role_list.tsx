@@ -115,7 +115,7 @@ export class RoleLsit extends Component<{}, MyState> {
                         toast: true,
                         position: "bottom-end",
                         showConfirmButton: false,
-                        timer: 5000,
+                        timer: 3000,
                         timerProgressBar: true,
                         didOpen: (toast) => {
                             toast.onmouseenter = Swal.stopTimer;
@@ -162,7 +162,6 @@ export class RoleLsit extends Component<{}, MyState> {
     private createRole: () => Promise<void> = async () => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            this.setState({ nameCurrent: this.state.newRole });
             await axios.post(`http://localhost:8000/api/admin/create-role/`, {
                 name: this.state.newRole
             },
@@ -179,7 +178,7 @@ export class RoleLsit extends Component<{}, MyState> {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             this.getRole();
-
+                            this.setState({ edit_role: this.state.nameCurrent });
                         }
                     });
                 }
@@ -237,6 +236,7 @@ export class RoleLsit extends Component<{}, MyState> {
                         }
                         if (this.state.nameCurrent !== "") {
                             this.setState({ name_role: this.state.nameCurrent });
+                            this.setState({edit_role:this.state.nameCurrent});
                         }
                         this.setState({ role: newArray });
                         this.setState({ role_backup: response.data.role });
@@ -386,15 +386,13 @@ export class RoleLsit extends Component<{}, MyState> {
     }
     private setEditeRole: (newState: ChangeEvent<HTMLInputElement>) => Promise<void> = async (newState) => {
         await this.setState({ edit_role: newState.target.value });
-        if(this.state.name_role.toString() !== this.state.edit_role.toString())
-        {
+        if (this.state.name_role.toString() !== this.state.edit_role.toString()) {
             this.setAnimationAlert(1);
-        }else
-        {
+        } else {
             this.setAnimationAlert(0);
-            
+
         }
-   
+
     }
     private OnDeletePermise(): void {
         Swal.fire({
@@ -429,9 +427,9 @@ export class RoleLsit extends Component<{}, MyState> {
                             <Select value={this.state.name_role} onChange={this.handleSelectRole} className='my-1 inline-flex text-indigo-950 ' id="countries" required>
                                 <option value={this.state.name_role} selected>{this.state.name_role}</option>
                                 {
-                                    this.state.role.map((e: permise) => (
+                                    this.state.role.map((e: permise, i: number) => (
                                         (e.name === "super_admin" || e.name === "member") ?
-                                            (null) : (<option value={e.name}>{e.name}</option>)
+                                            (null) : (<option key={i + 1} value={e.name}>{e.name}</option>)
                                     )
                                     )
                                 }
@@ -478,7 +476,7 @@ export class RoleLsit extends Component<{}, MyState> {
                         {
                             this.state.role.map((e: permise, i: number) => (
                                 (e.name === this.state.name_role) ?
-                                    (<tbody>
+                                    (<tbody >
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                             <td className="px-6 py-4 text-black">
                                                 สามารถจัดการสมาชิกได้

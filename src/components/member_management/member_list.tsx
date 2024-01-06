@@ -37,6 +37,8 @@ export class MemberList extends Component<{}, MyState> {
     }
     private getDataUserAll: (rows_a: number, rows_b: number) => void = async (rows_a, rows_b) => {
         this.setState({ selectBox: [] });
+        this.setState({deleteUser:false})
+        this.setState({selectBoxAll:false})
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
             await axios.get(`http://localhost:8000/api/admin/get-user/${rows_a}/${rows_b}`, { headers: { 'Authorization': `Bearer ${token}` } })
@@ -82,13 +84,12 @@ export class MemberList extends Component<{}, MyState> {
         }
 
     }
-    private DeleteUser: (user: string) => void = async (user) => {
-        this.setState({ selectBox: [] });
+    private DeleteUser: (user: string , callback:(callback:any)=>void) => void = async (user,callback) => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
             await axios.get(`http://localhost:8000/api/admin/delete-member/${user}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response: any) => {
                 if (response.status === 204) {
-                    this.getDataUserAll(0, 9);
+                    callback("process successed");
                     const Toast = Swal.mixin({
                         toast: true,
                         position: "bottom-end",
@@ -133,6 +134,8 @@ export class MemberList extends Component<{}, MyState> {
 
     }
     private OnDeleteUser: () => Promise<void> = async () => {
+        let totalCalls:number = 0;
+        let completedCalls:number = 0;
         Swal.fire({
             title: "คำเตือน",
             text: "การลบสมาชิกจะทำให้คุณไม่สามารถเข้าถึงบริการหรือข้อมูลที่เกี่ยวข้องได้อีก. กรุณาทราบถึงการดำเนินการนี้.",
@@ -142,12 +145,19 @@ export class MemberList extends Component<{}, MyState> {
             showDenyButton: true,
             showCancelButton: true,
             showConfirmButton: false,
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isDenied) {
-                this.state.selectBox.map((element: boolean, i) => {
+                 this.state.selectBox.map((element: boolean, i) => {
                     if (element) {
                         if (this.state.data[i].member !== "super_admin") {
-                            this.DeleteUser(this.state.data[i].user);
+                            this.DeleteUser(this.state.data[i].user , ()=>
+                            {
+                                completedCalls++;
+                                if (completedCalls === totalCalls) {
+                                   this.getDataUserAll(0,9);
+                                }
+                            });
+                            totalCalls++
                         } else {
                             Swal.fire({
                                 title: "พบข้อผิดพลาด",
@@ -160,7 +170,6 @@ export class MemberList extends Component<{}, MyState> {
                             })
 
                         }
-
                     }
                 })
             }
@@ -218,8 +227,6 @@ export class MemberList extends Component<{}, MyState> {
             this.setState({ deleteUser: false });
         }
     };
-
-
     private async setRows(event: ChangeEvent<HTMLSelectElement>): Promise<void> {
         await this.setState({ rows: Number.parseInt(event.target.value) })
         if (this.state.currentPage !== 1) {
@@ -322,7 +329,6 @@ export class MemberList extends Component<{}, MyState> {
                                             (
 
                                                 <tr key={index + 1} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-
                                                     <td className="w-4 p-4">
                                                         <div className="flex items-center">
                                                             <input checked={this.state.selectBox[index]} id="checkbox-table-search-1" onChange={() => this.handleCheckboxChange(index)} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
