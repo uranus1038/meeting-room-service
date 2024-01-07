@@ -14,25 +14,29 @@ import { position } from "../../interface/position";
 interface MyProps {
     undo: (newState: number) => void;
     getSectionAll: (rows_a: number, rows_b: number) => void;
+    code : string  ;
+    section :string ;
+    department: string ;
+    note : string ;
 }
 interface MyState {
-    code: string;
-    section:string ; 
-    department: string;
-    note: string;
-    departmentAll:position[] ;
+    codeCurrent : string ;
+    sectionCurrent : string ; 
+    departmentCurrent : string ; 
+    departmentAll : position[] ;
+    noteCurrent : string ;
     error: string;
 
 }
-export class AddSection extends Component<MyProps, MyState> {
+export class UpdateSection extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
         super(props);
         this.state = {
-            code: "",
-            section:"" , 
-            department: "---",
-            departmentAll:[],
-            note: "",
+            codeCurrent :  this.props.code, 
+            sectionCurrent :this.props.section,
+            departmentCurrent : this.props.department , 
+            departmentAll:[] , 
+            noteCurrent : this.props.note ,
             error: "",
         };
     }
@@ -40,31 +44,41 @@ export class AddSection extends Component<MyProps, MyState> {
     {
         this.fecthDepartmentAll();
     }
-    private OnCreate: () => Promise<void> = async () => {
-
+    private OnUpdate : ()=> Promise<void> = async ()=>
+    {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.post(`http://localhost:8000/api/admin/add-section/`, {
-                code: this.state.code,
-                section : this.state.section , 
-                department: this.state.department,
-                note: this.state.note,
+            await axios.post(`http://localhost:8000/api/admin/update-section/`, {
+                code: this.state.codeCurrent , 
+                section : this.state.sectionCurrent ,
+                department : this.state.departmentCurrent , 
+                note : this.state.noteCurrent , 
+                old_section : this.props.section , 
+                old_code :  this.props.code
             },
                 { headers: { 'Authorization': `Bearer ${token}` } }
-            ).then((response: any) => {
-
+            ).then((response :any) => {
                 if (response.status === 200) {
                     this.props.undo(0);
-                    this.props.getSectionAll(0, 9);
-                    Swal.fire({
-                        title: "เพิ่มแผนกใหม่เสร็จสิ้น",
-                        text: "คุณสามารถปรับปรุงหรือสร้างกระบวนการทำงานที่มีประสิทธิภาพในการปฏิบัติงานร่วมกับแผนกที่มีอยู่",
+                    this.props.getSectionAll(0,9);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "bottom-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
                         icon: "success",
-                        confirmButtonText: "ตกลง",
-                    })
+                        title: "อัปเดตข้อมูลฝ่ายเสร็จสิ้น"
+                    });
                 }
             }).catch((error) => {
-                console.log(error);
+                console.log( error);
                 if (error.response.status === 403) {
                     localStorage.removeItem(keyName);
                     console.log("403 ไม่สามารถเข้าถึงข้อมูลได้");
@@ -94,6 +108,10 @@ export class AddSection extends Component<MyProps, MyState> {
         }
     }
     private fecthDepartmentAll: () => void = async () => {
+        if(this.state.noteCurrent === "-")
+        {
+            this.setState({noteCurrent:""})
+        }
         await axios.get(`http://localhost:8000/api/user/department/`,).then((response:any) => {
             if (response.status === 200) {
                 const newArray: position[] = response.data.department.map((obj: position) => {
@@ -126,17 +144,47 @@ export class AddSection extends Component<MyProps, MyState> {
             }
         })
     }
-    private setNewCode: (event: ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) => {
-        await this.setState({ code: event.target.value });
+    private setAnimationAlert(state: Number): void {
+        switch (state) {
+            case 0:
+                document.getElementById("alertInfo")?.classList.add("hidden");
+                break;
+            case 1:
+                document.getElementById("alertInfo")?.classList.remove("hidden");
+                break;
+        }
     }
-    private setNewSection: (events: ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) => {
-        await this.setState({ section: event.target.value });
+    private isAlert(): void {
+        if(this.props.code !== this.state.codeCurrent 
+            || this.props.section !== this.state.sectionCurrent
+            || this.props.department !== this.state.departmentCurrent 
+            || this.props.note !== this.state.noteCurrent)
+        {
+            this.setAnimationAlert(1);
+        }else
+        {
+            this.setAnimationAlert(0);
+        }
     }
-    private setNewDepartment: (events: ChangeEvent<HTMLSelectElement>) => Promise<void> = async (event) => {
-        await this.setState({ department: event.target.value });
+    private setNewCode:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
+    {
+        await this.setState({codeCurrent:event.target.value});
+        this.isAlert();
     }
-    private setNewNote: (event: ChangeEvent<HTMLTextAreaElement>) => Promise<void> = async (event) => {
-        await this.setState({ note: event.target.value });
+    private setNewSection:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
+    {
+        await this.setState({sectionCurrent:event.target.value});
+        this.isAlert();
+    }
+    private setNewDepartment:(event:ChangeEvent<HTMLSelectElement>) => Promise<void> = async (event) =>
+    {
+        await this.setState({departmentCurrent:event.target.value});
+        this.isAlert();
+    }
+    private setNewNote:(event:ChangeEvent<HTMLTextAreaElement>) => Promise<void> = async (event) =>
+    {
+        await this.setState({noteCurrent:event.target.value});
+        this.isAlert();
     }
     render(): ReactNode {
         return (
@@ -160,7 +208,7 @@ export class AddSection extends Component<MyProps, MyState> {
                         </div>
                     </div>
                     <select onChange={this.setNewDepartment} id="department" className="inline-flex items-center w-full py-2.5 px-4 text-sm font-medium  text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600">
-                        <option value={this.state.department} selected>{this.state.department}</option>
+                        <option value={this.state.departmentCurrent} selected>{this.state.departmentCurrent}</option>
                         {this.state.departmentAll.map((e: position, i: number) => (
                             <option key={i} value={e.department}>
                                 {e.department}
@@ -170,21 +218,17 @@ export class AddSection extends Component<MyProps, MyState> {
                     </select>
                     <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รหัสแผนก</label>
-                        <input value={this.state.code} onChange={this.setNewCode} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                        <input value={this.state.codeCurrent} onChange={this.setNewCode} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อแผนก</label>
-                        <input value={this.state.section} onChange={this.setNewSection} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                        <input value={this.state.sectionCurrent} onChange={this.setNewSection}  type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label htmlFor="note" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเหตุ</label>
-                        <textarea value={this.state.note} onChange={this.setNewNote} id="note" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
+                        <textarea value={this.state.noteCurrent} onChange={this.setNewNote}  id="note" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
                     </div>
                     <div>
-                        <ButtonGroup>
-                            <Button onClick={() => { this.props.undo(0) }}>ย้อนกลับ</Button>
-                            <Button onClick={() => { this.OnCreate() }}>เพิ่มฝ่าย</Button>
-                        </ButtonGroup>
                     </div>
                     <Alert id="alertInfo" className="animationInfoUser w-full hidden sticky bottom-6" additionalContent={
                         <>
@@ -194,13 +238,14 @@ export class AddSection extends Component<MyProps, MyState> {
                                 </div>
                                 <div>
                                     <button
+                                        onClick={()=>{this.OnUpdate()}}
                                         type="button"
                                         className="mr-2 inline-flex items-center rounded-lg bg-cyan-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-cyan-800 focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-800 dark:hover:bg-cyan-900"
                                     >
                                         อัปเดต
                                     </button>
                                     <button
-
+                                        onClick={()=>{this.props.undo(0)}}
                                         type="button"
                                         className="rounded-lg border border-cyan-700 bg-transparent px-3 py-1.5 text-center text-xs font-medium text-cyan-700 hover:bg-cyan-800 hover:text-white focus:ring-4 focus:ring-cyan-300 dark:border-cyan-800 dark:text-cyan-800 dark:hover:text-white"
                                     >
@@ -212,9 +257,6 @@ export class AddSection extends Component<MyProps, MyState> {
                         </>
                     } color="warning" >
                     </Alert>
-
-
-
                 </form>
 
             </>

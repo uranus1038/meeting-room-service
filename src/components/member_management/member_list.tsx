@@ -9,7 +9,7 @@ import { Avatar, Button, Select, Breadcrumb, Pagination, Alert } from 'flowbite-
 import { user } from "../../interface/accout";
 import { MemberFormUpdate } from "./member_update";
 import CreationForm from "../index/creation";
-import Addmember from "./AddUser";
+import Addmember from "./user_add";
 
 interface MyState {
     currentPage: number;

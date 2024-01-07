@@ -94,7 +94,6 @@ class Calendar extends Component<MyProps, MyState> {
                         alert("ขออภัย, ไม่สามารถทำการจองย้อนหลังได้เนื่องจากเลยเวลาที่กำหนดไว้แล้ว");
                     }
                 }
-
             }
         } else {
             this.props.OnFormUser(true, false);

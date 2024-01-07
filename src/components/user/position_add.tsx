@@ -13,33 +13,32 @@ import { user } from "../../interface/accout";
 import { position } from "../../interface/position";
 interface MyProps {
     undo: (newState: number) => void;
-    getDepartmentAll: (rows_a: number, rows_b: number) => void;
+    getPositionAll: (rows_a: number, rows_b: number) => void;
 }
 interface MyState {
     code : string ;
-    department : string ; 
+    role : string ; 
     note : string ;
     error: string;
 
 }
-export class AddDepartment extends Component<MyProps, MyState> {
+export class AddPosition extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
         super(props);
         this.state = {
             code : "" , 
-            department : "" , 
+            role : "" , 
             note : "" ,
             error: "",
         };
     }
     private OnCreate : ()=> Promise<void> = async ()=>
     {
-        
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.post(`http://localhost:8000/api/admin/add-department/`, {
+            await axios.post(`http://localhost:8000/api/admin/add-position/`, {
                 code: this.state.code , 
-                department : this.state.department , 
+                role : this.state.role , 
                 note : this.state.note , 
             },
                 { headers: { 'Authorization': `Bearer ${token}` } }
@@ -47,10 +46,10 @@ export class AddDepartment extends Component<MyProps, MyState> {
                 
                 if (response.status === 200) {
                     this.props.undo(0);
-                    this.props.getDepartmentAll(0,9);
+                    this.props.getPositionAll(0,9);
                     Swal.fire({
-                        title: "เพิ่มฝ่ายใหม่เสร็จสิ้น",
-                        text: "คุณสามารถปรับปรุงหรือสร้างกระบวนการทำงานที่มีประสิทธิภาพในการปฏิบัติงานร่วมกับฝ่ายที่มีอยู่", 
+                        title: "เพิ่มตำแหน่งใหม่เสร็จสิ้น",
+                        text: "คุณสามารถปรับปรุงหรือสร้างกระบวนการทำงานที่มีประสิทธิภาพในการปฏิบัติงานร่วมกับตำแหน่งที่มีอยู่", 
                         icon: "success",
                         confirmButtonText: "ตกลง",
                     })
@@ -89,9 +88,9 @@ export class AddDepartment extends Component<MyProps, MyState> {
     {
         await this.setState({code:event.target.value});
     }
-    private setNewDepartment:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
+    private setNewRole:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
     {
-        await this.setState({department:event.target.value});
+        await this.setState({role:event.target.value});
     }
     private setNewNote:(event:ChangeEvent<HTMLTextAreaElement>) => Promise<void> = async (event) =>
     {
@@ -120,12 +119,12 @@ export class AddDepartment extends Component<MyProps, MyState> {
                     </div>
 
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รหัสฝ่าย</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รหัสตำแหน่ง</label>
                         <input value={this.state.code} onChange={this.setNewCode} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อฝ่าย</label>
-                        <input value={this.state.department} onChange={this.setNewDepartment}  type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อตำแหน่ง</label>
+                        <input value={this.state.role} onChange={this.setNewRole}  type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label htmlFor="note" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเหตุ</label>

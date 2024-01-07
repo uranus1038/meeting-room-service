@@ -32,7 +32,7 @@ interface MyProps {
     onBooking: (newState: boolean) => void;
     dateStr: string;
     data: user;
-    getDataBooking: () => Promise<void> ;
+    getDataBooking: () => Promise<void>;
 }
 export class Booking extends Component<MyProps, MyState>
 {
@@ -51,18 +51,27 @@ export class Booking extends Component<MyProps, MyState>
                 await this.setState({ start_date: this.formatDate(this.props.dateStr, "en") })
                 await this.setState({ end_date: this.formatDate(this.props.dateStr, "en") })
             }
+            console.log(this.state.start_date);
             await axios.post("http://localhost:8000/api/user/reserve/", {
-                user: this.props.data.user, userName: this.props.data.userName,
-                tel: this.props.data.tel, title: this.state.title, start_time: this.state.start_time,
-                end_time: this.state.end_time, start_date: this.state.start_date, end_date: this.state.end_date,
-                number: this.state.number, room: this.state.room, note: this.state.note, isApprove: this.state.isApprove
+                user: this.props.data.user,
+                userName: this.props.data.userName,
+                tel: this.props.data.tel,
+                title: this.state.title,
+                start_time: this.state.start_time,
+                end_time: this.state.end_time,
+                start_date: this.state.start_date,
+                end_date: this.state.end_date,
+                number: this.state.number,
+                room: this.state.room,
+                note: this.state.note,
+                isApprove: this.state.isApprove
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            }).then((response:any)=>{
-                if(response.status === 200)
-                {
+            }).then((response: any) => {
+                if (response.status === 200) {
+                    this.resetStateBooking();
                     this.props.getDataBooking();
                     this.props.onBooking(false)
                     Swal.fire({
@@ -74,8 +83,7 @@ export class Booking extends Component<MyProps, MyState>
                 }
             }
             ).catch((error) => {
-                if(error.response.status === 409)
-                {
+                if (error.response.status === 409) {
                     Swal.fire({
                         title: "Oops! การจองไม่สำเร็จ",
                         text: "ดูเหมือนว่าวันเวลานี้จะถูกจองโดยผู้ใช้งานท่านอื่นไปแล้วสิ น่าเสียดายจริงๆลองเลือกวันเวลาอื่นดูนะ",
@@ -170,11 +178,17 @@ export class Booking extends Component<MyProps, MyState>
         return result;
 
     }
+    private resetStateBooking: () => Promise<void> = async () => {
+        await this.setState({ start_date: "", end_date: "", title: "", number: 5, switch1: true ,  start_time: "08:00", end_time: "18:00" });
+    }
     render(): ReactNode {
         let date: string = this.formatDate(this.props.dateStr, "th");
         return (
             <>
-                <Modal theme={{ root: { base: "fixed -top-20 right-0 left-0 z-50 h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full" } }} show={this.props.bookingModal} size="2xl" onClose={() => { this.props.onBooking(false) }} popup>
+                <Modal theme={{ root: { base: "fixed -top-20 right-0 left-0 z-50 h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full" } }} show={this.props.bookingModal} size="2xl" onClose={() => {
+                    this.props.onBooking(false)
+                    this.resetStateBooking()
+                }} popup>
                     <Modal.Header />
                     <Modal.Body >
 
@@ -244,7 +258,10 @@ export class Booking extends Component<MyProps, MyState>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={() => { this.OnSubmit() }} theme={{ color: { purple: "bg-[#7B66FF] text-white hover:bg-indigo-700" } }} color="purple">จองห้องประชุม</Button>
-                        <Button color="gray" onClick={() => { this.props.onBooking(false) }}>
+                        <Button color="gray" onClick={() => {
+                            this.props.onBooking(false)
+                            this.resetStateBooking()
+                        }}>
                             ปิด
                         </Button>
                     </Modal.Footer>

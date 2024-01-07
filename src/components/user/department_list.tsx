@@ -146,7 +146,7 @@ export class DepartmentComponent extends Component<{}, MyState> {
             })
         }
     }
-    private OnDisUser: () => Promise<void> = async () => {
+    private OnDisDepartment: () => Promise<void> = async () => {
         let totalCalls:number = 0;
         let completedCalls:number = 0;
         Swal.fire({
@@ -251,7 +251,7 @@ export class DepartmentComponent extends Component<{}, MyState> {
     private setDataDepartment: (code: string, department_prop: string, note: string) => void = (code, department_prop, note) => {
         this.setState({ code, department_prop, note });
     }
-    render(): ReactNode {
+    render(): ReactNode { 
         return (
             <div className="ms-72 p-6">
                 {
@@ -278,7 +278,7 @@ export class DepartmentComponent extends Component<{}, MyState> {
                                     <Button.Group>
                                         {
                                             (this.state.deleteDeparment) ?
-                                                (<Button onClick={() => { this.OnDisUser() }} className="bg-red-500">ลบสมาชิก</Button>
+                                                (<Button onClick={() => { this.OnDisDepartment() }} className="bg-red-500">ลบสมาชิก</Button>
                                                 )
                                                 :
                                                 (<Button disabled className="bg-red-500">ลบฝ่าย</Button>)

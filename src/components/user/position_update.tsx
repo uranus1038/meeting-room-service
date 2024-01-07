@@ -13,47 +13,59 @@ import { user } from "../../interface/accout";
 import { position } from "../../interface/position";
 interface MyProps {
     undo: (newState: number) => void;
-    getDepartmentAll: (rows_a: number, rows_b: number) => void;
+    getPositionAll: (rows_a: number, rows_b: number) => void;
+    code : string  ;
+    role : string ;
+    note : string ;
 }
 interface MyState {
-    code : string ;
-    department : string ; 
-    note : string ;
+    codeCurrent : string ;
+    roleCurrent : string ; 
+    noteCurrent : string ;
     error: string;
 
 }
-export class AddDepartment extends Component<MyProps, MyState> {
+export class UpdatePosition extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
         super(props);
         this.state = {
-            code : "" , 
-            department : "" , 
-            note : "" ,
+            codeCurrent :  this.props.code, 
+            roleCurrent : this.props.role , 
+            noteCurrent : this.props.note ,
             error: "",
         };
     }
-    private OnCreate : ()=> Promise<void> = async ()=>
+    private OnUpdate : ()=> Promise<void> = async ()=>
     {
-        
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
-            await axios.post(`http://localhost:8000/api/admin/add-department/`, {
-                code: this.state.code , 
-                department : this.state.department , 
-                note : this.state.note , 
+            await axios.post(`http://localhost:8000/api/admin/update-position/`, {
+                code: this.state.codeCurrent , 
+                role : this.state.roleCurrent , 
+                note : this.state.noteCurrent , 
+                old_role : this.props.role , 
+                old_code :  this.props.code
             },
                 { headers: { 'Authorization': `Bearer ${token}` } }
             ).then((response :any) => {
-                
                 if (response.status === 200) {
                     this.props.undo(0);
-                    this.props.getDepartmentAll(0,9);
-                    Swal.fire({
-                        title: "เพิ่มฝ่ายใหม่เสร็จสิ้น",
-                        text: "คุณสามารถปรับปรุงหรือสร้างกระบวนการทำงานที่มีประสิทธิภาพในการปฏิบัติงานร่วมกับฝ่ายที่มีอยู่", 
+                    this.props.getPositionAll(0,9);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "bottom-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
                         icon: "success",
-                        confirmButtonText: "ตกลง",
-                    })
+                        title: "อัปเดตข้อมูลฝ่ายเสร็จสิ้น"
+                    });
                 }
             }).catch((error) => {
                 console.log( error);
@@ -85,17 +97,41 @@ export class AddDepartment extends Component<MyProps, MyState> {
             })
         }
     }
+    private setAnimationAlert(state: Number): void {
+        switch (state) {
+            case 0:
+                document.getElementById("alertInfo")?.classList.add("hidden");
+                break;
+            case 1:
+                document.getElementById("alertInfo")?.classList.remove("hidden");
+                break;
+        }
+    }
+    private isAlert(): void {
+        if(this.props.code !== this.state.codeCurrent 
+            || this.props.role !== this.state.roleCurrent 
+            || this.props.note !== this.state.noteCurrent)
+        {
+            this.setAnimationAlert(1);
+        }else
+        {
+            this.setAnimationAlert(0);
+        }
+    }
     private setNewCode:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
     {
-        await this.setState({code:event.target.value});
+        await this.setState({codeCurrent:event.target.value});
+        this.isAlert();
     }
-    private setNewDepartment:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
+    private setNewRole:(event:ChangeEvent<HTMLInputElement>) => Promise<void> = async (event) =>
     {
-        await this.setState({department:event.target.value});
+        await this.setState({roleCurrent:event.target.value});
+        this.isAlert();
     }
     private setNewNote:(event:ChangeEvent<HTMLTextAreaElement>) => Promise<void> = async (event) =>
     {
-        await this.setState({note:event.target.value});
+        await this.setState({noteCurrent:event.target.value});
+        this.isAlert();
     }
     render(): ReactNode {
         return (
@@ -120,22 +156,18 @@ export class AddDepartment extends Component<MyProps, MyState> {
                     </div>
 
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รหัสฝ่าย</label>
-                        <input value={this.state.code} onChange={this.setNewCode} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รหัสตำแหน่ง</label>
+                        <input value={this.state.codeCurrent} onChange={this.setNewCode} type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อฝ่าย</label>
-                        <input value={this.state.department} onChange={this.setNewDepartment}  type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อตำแหน่ง</label>
+                        <input value={this.state.roleCurrent} onChange={this.setNewRole}  type="text" name="tel" id="tel" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
                     </div>
                     <div>
                         <label htmlFor="note" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเหตุ</label>
-                        <textarea value={this.state.note} onChange={this.setNewNote}  id="note" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
+                        <textarea value={this.state.noteCurrent} onChange={this.setNewNote}  id="note" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
                     </div>
                     <div>
-                        <ButtonGroup>
-                            <Button onClick={() => { this.props.undo(0) }}>ย้อนกลับ</Button>
-                            <Button onClick={() => { this.OnCreate()}}>เพิ่มฝ่าย</Button>
-                        </ButtonGroup>
                     </div>
                     <Alert id="alertInfo" className="animationInfoUser w-full hidden sticky bottom-6" additionalContent={
                         <>
@@ -145,13 +177,14 @@ export class AddDepartment extends Component<MyProps, MyState> {
                                 </div>
                                 <div>
                                     <button
+                                        onClick={()=>{this.OnUpdate()}}
                                         type="button"
                                         className="mr-2 inline-flex items-center rounded-lg bg-cyan-700 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-cyan-800 focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-800 dark:hover:bg-cyan-900"
                                     >
                                         อัปเดต
                                     </button>
                                     <button
-
+                                        onClick={()=>{this.props.undo(0)}}
                                         type="button"
                                         className="rounded-lg border border-cyan-700 bg-transparent px-3 py-1.5 text-center text-xs font-medium text-cyan-700 hover:bg-cyan-800 hover:text-white focus:ring-4 focus:ring-cyan-300 dark:border-cyan-800 dark:text-cyan-800 dark:hover:text-white"
                                     >
@@ -163,9 +196,6 @@ export class AddDepartment extends Component<MyProps, MyState> {
                         </>
                     } color="warning" >
                     </Alert>
-
-
-
                 </form>
 
             </>

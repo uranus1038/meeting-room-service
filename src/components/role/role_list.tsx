@@ -162,6 +162,7 @@ export class RoleLsit extends Component<{}, MyState> {
     private createRole: () => Promise<void> = async () => {
         if (localStorage.getItem(keyName) !== null) {
             const token = localStorage.getItem(keyName);
+            this.setState({ nameCurrent: this.state.newRole});
             await axios.post(`http://localhost:8000/api/admin/create-role/`, {
                 name: this.state.newRole
             },
@@ -178,7 +179,6 @@ export class RoleLsit extends Component<{}, MyState> {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             this.getRole();
-                            this.setState({ edit_role: this.state.nameCurrent });
                         }
                     });
                 }
@@ -392,7 +392,7 @@ export class RoleLsit extends Component<{}, MyState> {
             this.setAnimationAlert(0);
 
         }
-
+        document.getElementById("alertErrorTable")?.classList.add("hidden");
     }
     private OnDeletePermise(): void {
         Swal.fire({
